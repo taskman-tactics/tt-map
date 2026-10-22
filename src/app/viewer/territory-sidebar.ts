@@ -21,6 +21,7 @@ import { formatHeldDuration } from './held-duration';
 import { regionHolder } from './region-holder';
 import { resolveTaskDeepLink } from './task-deep-link';
 import { resolveTerritorySelection } from './territory-selection';
+import { svgFragmentUrl } from './svg-fragment-url';
 import { thumbnailModel } from './territory-thumbnail';
 import { groupTerritoryTasks } from './territory-tasks';
 import { ViewerDataService } from './viewer-data';
@@ -47,6 +48,11 @@ export class TerritorySidebar {
   protected readonly basemapUrl = '/basemap.webp';
   protected readonly boardWidth = BOARD_WIDTH_PX;
   protected readonly boardHeight = BOARD_HEIGHT_PX;
+
+  /** Defeat `<base href>` breaking SVG `url(#id)` clip references. */
+  protected clipPathUrl(slug: string): string {
+    return svgFragmentUrl(`territory-clip-${slug}`);
+  }
 
   private readonly slug = toSignal(
     this.route.paramMap.pipe(map((params) => params.get('slug'))),

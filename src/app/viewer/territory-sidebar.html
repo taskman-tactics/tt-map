@@ -26,6 +26,7 @@
             <svg
               class="territory-thumb"
               [attr.viewBox]="vb.x + ' ' + vb.y + ' ' + vb.width + ' ' + vb.height"
+              preserveAspectRatio="xMidYMid meet"
               role="img"
               [attr.aria-label]="selected.name + ' on the board'"
             >
@@ -44,12 +45,13 @@
                 [attr.height]="boardHeight"
                 preserveAspectRatio="none"
               />
+              <!-- Dim the whole basemap (entire thumbnail), not just the viewBox pad. -->
               <rect
                 class="territory-thumb__dim"
-                [attr.x]="vb.x"
-                [attr.y]="vb.y"
-                [attr.width]="vb.width"
-                [attr.height]="vb.height"
+                x="0"
+                y="0"
+                [attr.width]="boardWidth"
+                [attr.height]="boardHeight"
               />
               <image
                 [attr.href]="basemapUrl"
@@ -58,7 +60,7 @@
                 [attr.width]="boardWidth"
                 [attr.height]="boardHeight"
                 preserveAspectRatio="none"
-                [attr.clip-path]="'url(#territory-clip-' + selected.slug + ')'"
+                [attr.clip-path]="clipPathUrl(selected.slug)"
               />
               @for (poly of thumb.polygons; track $index) {
                 <polygon

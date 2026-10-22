@@ -77,3 +77,15 @@ In PowerShell, `gh api ... -F issue_id=(Some-Expr)` passes `issue_id=` and the v
 **Action:** applied → `.cursor/rules/terra-draw-authoring.mdc`
 
 terra-draw `finish` also fires for `insertMidpoint`. A fresh midpoint lies on the edge (collinear with its neighbors) until the user drags it. Running shape-preserving collinear simplify on every finish deletes that vertex immediately — looks like “midpoint click does nothing.” Gate collinear simplify to `context.action === 'draw'` (and/or commit/export); keep snap-on-finish for edits.
+
+## 2026-10-22: Angular Vitest can serve a stale module after mid-run edits
+
+**Action:** pending
+
+`@angular/build:unit-test` (Vitest + Vite) may keep an older transform of a newly created module under `node_modules/.vite` / `.angular/cache`, so tests assert against pre-fix code while `bun` importing the same path is current. If a failing assertion matches a just-removed bug, delete `node_modules/.vite` (and `node_modules/.vitest-cache` if present) and re-run before chasing logic.
+
+## 2026-10-22: SVG `url(#id)` clip/mask refs break under `<base href>`
+
+**Action:** pending
+
+Angular's `<base href=\"/\">` makes bare SVG `url(#clipId)` resolve against the document base instead of the in-document `<clipPath id>`, so clipped overlays miss and look offset. Build the reference from the current page URL (strip hash, append `#id`), e.g. `url(http://host/path#clipId)`.
