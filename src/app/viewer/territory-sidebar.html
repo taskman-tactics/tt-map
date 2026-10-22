@@ -1,7 +1,14 @@
 @if (selection(); as selected) {
   <aside class="territory-panel" role="dialog" [attr.aria-label]="selected.name">
     <header class="territory-panel__header">
-      <h1 class="territory-panel__title">{{ selected.name }}</h1>
+      <div class="territory-panel__heading">
+        <h1 class="territory-panel__title">{{ selected.name }}</h1>
+        @if (selected.territory; as territory) {
+          <p class="territory-panel__defense">
+            {{ territory.defense.current }}/{{ territory.defense.max }} Defense
+          </p>
+        }
+      </div>
       <button
         type="button"
         class="territory-panel__close"
@@ -11,5 +18,148 @@
         ×
       </button>
     </header>
+
+    <div class="territory-panel__body">
+      <section class="territory-panel__thumb" aria-label="Territory thumbnail">
+        @if (thumbnail(); as thumb) {
+          @if (thumbViewBox(); as vb) {
+            <svg
+              class="territory-thumb"
+              [attr.viewBox]="vb.x + ' ' + vb.y + ' ' + vb.width + ' ' + vb.height"
+              role="img"
+              [attr.aria-label]="selected.name + ' on the board'"
+            >
+              <defs>
+                <clipPath [attr.id]="'territory-clip-' + selected.slug">
+                  @for (poly of thumb.polygons; track $index) {
+                    <polygon [attr.points]="pointsAttr(poly.exterior)" />
+                  }
+                </clipPath>
+              </defs>
+              <image
+                [attr.href]="basemapUrl"
+                x="0"
+                y="0"
+                [attr.width]="boardWidth"
+                [attr.height]="boardHeight"
+                preserveAspectRatio="none"
+              />
+              <rect
+                class="territory-thumb__dim"
+                [attr.x]="vb.x"
+                [attr.y]="vb.y"
+                [attr.width]="vb.width"
+                [attr.height]="vb.height"
+              />
+              <image
+                [attr.href]="basemapUrl"
+                x="0"
+                y="0"
+                [attr.width]="boardWidth"
+                [attr.height]="boardHeight"
+                preserveAspectRatio="none"
+                [attr.clip-path]="'url(#territory-clip-' + selected.slug + ')'"
+              />
+              @for (poly of thumb.polygons; track $index) {
+                <polygon
+                  class="territory-thumb__outline"
+                  [attr.points]="pointsAttr(poly.exterior)"
+                  [attr.stroke]="outlineColor()"
+                />
+              }
+            </svg>
+          }
+        } @else {
+          <div class="territory-thumb territory-thumb--placeholder">
+            No geometry
+          </div>
+        }
+      </section>
+
+      @if (region(); as reg) {
+        <section class="territory-panel__region">
+          <span class="territory-panel__region-name">{{ reg.name }}</span>
+          @if (regionHeldBy(); as holder) {
+            <span class="territory-panel__region-badge">
+              Region held by {{ holder.name }}
+            </span>
+          }
+        </section>
+      }
+
+      <section class="territory-panel__holding">
+        @if (holdingTeam(); as team) {
+          <a class="territory-panel__team" [routerLink]="['/teams', team.id]">
+            {{ team.name }}
+          </a>
+          @if (heldLabel(); as held) {
+            <span
+              class="territory-panel__held"
+              [attr.title]="held.title"
+            >
+              {{ held.text }}
+            </span>
+          }
+        } @else {
+          <span class="territory-panel__unclaimed">Unclaimed</span>
+        }
+      </section>
+
+      <section class="territory-panel__tasks" aria-label="Tasks">
+        <h2 class="territory-panel__section-title">Tasks</h2>
+        @if (taskLines().length === 0) {
+          <p class="territory-panel__empty">No Tasks</p>
+        } @else {
+          <ul class="territory-panel__task-list">
+            @for (line of taskLines(); track line.taskId; let i = $index) {
+              <li
+                class="territory-panel__task"
+                [class.territory-panel__task--highlight]="
+                  isHighlighted('task', line.taskId) ||
+                  isHighlighted('activity', line.activityId)
+                "
+                [attr.id]="'task-' + line.taskId"
+                [attr.data-activity-id]="line.activityId"
+              >
+                @if (isFirstOfActivity(i)) {
+                  <span
+                    class="territory-panel__activity-anchor"
+                    [attr.id]="'activity-' + line.activityId"
+                  ></span>
+                }
+                <strong>{{ line.activityName }}</strong>:
+                {{ line.taskName }}
+                <em>({{ line.attackDiceRoll }})</em>
+                @if (line.strategy === 'machine-gun') {
+                  <span
+                    class="territory-panel__strategy"
+                    title="Machine-Gun Task"
+                    aria-label="Machine-Gun Task"
+                  >
+                    <svg
+                      class="territory-panel__strategy-icon"
+                      viewBox="0 0 16 16"
+                      aria-hidden="true"
+                    >
+                      <path
+                        fill="currentColor"
+                        d="M1 7h2l1-2h3l1 2h5v2H9l-1 2H5L4 9H1V7zm3 5h2v2H4v-2zm6 0h2v2h-2v-2z"
+                      />
+                    </svg>
+                  </span>
+                }
+              </li>
+            }
+          </ul>
+        }
+      </section>
+
+      <section
+        class="territory-panel__event-log"
+        aria-label="Event Log"
+      >
+        <!-- Reserved for a future Event Log issue. -->
+      </section>
+    </div>
   </aside>
 }

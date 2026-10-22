@@ -43,6 +43,20 @@ export {
   resolveTerritorySelection,
   type TerritorySelection,
 } from './territory-selection';
+export { formatHeldDuration } from './held-duration';
+export { regionHolder } from './region-holder';
+export {
+  groupTerritoryTasks,
+  type TerritoryTaskLine,
+} from './territory-tasks';
+export {
+  thumbnailModel,
+  type ThumbnailModel,
+} from './territory-thumbnail';
+export {
+  resolveTaskDeepLink,
+  type TaskDeepLink,
+} from './task-deep-link';
 export { TerritorySidebar } from './territory-sidebar';
 export { TtAdminApi } from './tt-admin-api';
 export { ViewerDataService } from './viewer-data';

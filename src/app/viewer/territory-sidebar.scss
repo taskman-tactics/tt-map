@@ -20,6 +20,11 @@
   justify-content: space-between;
   gap: 12px;
   padding: 16px 16px 12px;
+  flex: none;
+}
+
+.territory-panel__heading {
+  min-width: 0;
 }
 
 .territory-panel__title {
@@ -27,6 +32,12 @@
   font-size: 1.25rem;
   font-weight: 650;
   line-height: 1.3;
+}
+
+.territory-panel__defense {
+  margin: 4px 0 0;
+  font-size: 0.9rem;
+  color: #cbd5e1;
 }
 
 .territory-panel__close {
@@ -48,6 +59,172 @@
 .territory-panel__close:focus-visible {
   background: rgb(255 255 255 / 12%);
   outline: none;
+}
+
+.territory-panel__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  padding: 0 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.territory-panel__thumb {
+  flex: none;
+}
+
+.territory-thumb {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  border-radius: 8px;
+  background: #020617;
+}
+
+.territory-thumb--placeholder {
+  display: grid;
+  place-items: center;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  border: 1px dashed #334155;
+}
+
+.territory-thumb__dim {
+  fill: #020617;
+  fill-opacity: 0.55;
+}
+
+.territory-thumb__outline {
+  fill: none;
+  stroke-width: 3;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.territory-panel__region {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.territory-panel__region-name {
+  font-weight: 600;
+}
+
+.territory-panel__region-badge {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgb(255 255 255 / 10%);
+  color: #e2e8f0;
+}
+
+.territory-panel__holding {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.territory-panel__team {
+  color: #93c5fd;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.territory-panel__team:hover,
+.territory-panel__team:focus-visible {
+  text-decoration: underline;
+}
+
+.territory-panel__held {
+  color: #cbd5e1;
+  font-size: 0.9rem;
+}
+
+.territory-panel__unclaimed {
+  color: #9ca3af;
+  font-weight: 600;
+}
+
+.territory-panel__section-title {
+  margin: 0 0 8px;
+  font-size: 0.85rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+.territory-panel__task-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.territory-panel__task {
+  position: relative;
+  padding: 6px 8px;
+  border-radius: 6px;
+  line-height: 1.35;
+  font-size: 0.92rem;
+}
+
+.territory-panel__task em {
+  color: #94a3b8;
+  font-style: italic;
+}
+
+.territory-panel__task--highlight {
+  animation: task-highlight 1.8s ease-out;
+}
+
+.territory-panel__activity-anchor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.territory-panel__strategy {
+  display: inline-flex;
+  vertical-align: middle;
+  margin-left: 4px;
+  color: #fbbf24;
+}
+
+.territory-panel__strategy-icon {
+  width: 0.95rem;
+  height: 0.95rem;
+}
+
+.territory-panel__empty {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+.territory-panel__event-log {
+  min-height: 2rem;
+  flex: none;
+}
+
+@keyframes task-highlight {
+  0% {
+    background: rgb(250 204 21 / 35%);
+  }
+  100% {
+    background: transparent;
+  }
 }
 
 /* Keep in sync with SIDEBAR_* / BOTTOM_SHEET_* in territory-bounds.ts */
