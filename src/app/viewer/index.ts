@@ -50,6 +50,8 @@ export {
   type TerritoryTaskLine,
 } from './territory-tasks';
 export {
+  THUMBNAIL_PAD_PX,
+  squareThumbnailViewBox,
   thumbnailModel,
   type ThumbnailModel,
 } from './territory-thumbnail';

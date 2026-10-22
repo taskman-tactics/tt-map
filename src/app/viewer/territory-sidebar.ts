@@ -28,7 +28,6 @@ import { ViewerDataService } from './viewer-data';
 
 const DURATION_TICK_MS = 30_000;
 const HIGHLIGHT_MS = 1_800;
-const THUMB_PAD_PX = 6;
 const DEEP_LINK_ATTEMPTS = 8;
 const DEEP_LINK_RETRY_MS = 50;
 
@@ -145,20 +144,6 @@ export class TerritorySidebar {
       return null;
     }
     return thumbnailModel(selected.features);
-  });
-
-  protected readonly thumbViewBox = computed(() => {
-    const model = this.thumbnail();
-    if (!model) {
-      return null;
-    }
-    const { x, y, width, height } = model.viewBox;
-    return {
-      x: x - THUMB_PAD_PX,
-      y: y - THUMB_PAD_PX,
-      width: Math.max(1, width + THUMB_PAD_PX * 2),
-      height: Math.max(1, height + THUMB_PAD_PX * 2),
-    };
   });
 
   protected readonly heldLabel = computed(() => {

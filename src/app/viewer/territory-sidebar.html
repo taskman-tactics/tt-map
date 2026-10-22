@@ -22,10 +22,17 @@
     <div class="territory-panel__body">
       <section class="territory-panel__thumb" aria-label="Territory thumbnail">
         @if (thumbnail(); as thumb) {
-          @if (thumbViewBox(); as vb) {
-            <svg
+          <svg
               class="territory-thumb"
-              [attr.viewBox]="vb.x + ' ' + vb.y + ' ' + vb.width + ' ' + vb.height"
+              [attr.viewBox]="
+                thumb.viewBox.x +
+                ' ' +
+                thumb.viewBox.y +
+                ' ' +
+                thumb.viewBox.width +
+                ' ' +
+                thumb.viewBox.height
+              "
               preserveAspectRatio="xMidYMid meet"
               role="img"
               [attr.aria-label]="selected.name + ' on the board'"
@@ -70,7 +77,6 @@
                 />
               }
             </svg>
-          }
         } @else {
           <div class="territory-thumb territory-thumb--placeholder">
             No geometry

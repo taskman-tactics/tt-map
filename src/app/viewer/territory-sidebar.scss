@@ -101,8 +101,7 @@
 .territory-thumb {
   display: block;
   width: 100%;
-  /* Height follows the Territory viewBox — a fixed aspect-ratio letterboxed
-     the crop so the dim only covered the shape bbox inside a taller frame. */
+  aspect-ratio: 1 / 1;
   height: auto;
   border-radius: 8px;
   background: #020617;
