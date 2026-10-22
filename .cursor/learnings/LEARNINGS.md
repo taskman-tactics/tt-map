@@ -66,6 +66,12 @@ A “LngLat = pixel/N” box makes basemap rows warp under MapLibre’s Mercator
 
 In PowerShell, `gh api ... -F issue_id=(Some-Expr)` passes `issue_id=` and the value as separate arguments (`accepts 1 arg(s), received 2`). Build the field first (`$f = "issue_id=$id"`) and pass `-F $f`.
 
+## 2026-10-22: Vitest fake timers can block async Promise settlement
+
+**Action:** pending
+
+`vi.useFakeTimers()` (default) can leave `async` fetch/load code stuck in `loading` because microtasks never flush the way tests expect. For poller/interval tests, fake only timeout APIs (`vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })`) and await the start/load promise instead of `runOnlyPendingTimersAsync` (which also fires the next poll).
+
 ## 2026-10-14: do not collinear-simplify on insertMidpoint finish
 
 **Action:** applied → `.cursor/rules/terra-draw-authoring.mdc`

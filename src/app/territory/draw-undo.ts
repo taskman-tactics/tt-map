@@ -28,7 +28,7 @@ export function isEditableKeyboardTarget(target: EventTarget | null): boolean {
   if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') {
     return true;
   }
-  return target.isContentEditable;
+  return Boolean(target.isContentEditable);
 }
 
 export function isUndoKeyEvent(event: KeyboardEvent): boolean {
