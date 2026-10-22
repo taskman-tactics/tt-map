@@ -13,6 +13,7 @@
   [renderWorldCopies]="false"
   [attributionControl]="false"
   (mapLoad)="onMapLoad($event)"
+  (mapClick)="onMapClick($event)"
 >
   <mgl-control mglNavigation [showCompass]="false" />
   <mgl-image-source
@@ -26,12 +27,15 @@
     source="basemap"
     [paint]="basemapPaint"
   />
-  <mgl-geojson-source id="territories" [data]="territoriesUrl" />
+  <mgl-geojson-source id="territories" [data]="territoryDisplay().polygons" />
   <mgl-layer
     id="territories-fill"
     type="fill"
     source="territories"
     [paint]="territoryFillPaint"
+    (layerClick)="onTerritoryClick($event)"
+    (layerMouseEnter)="onTerritoryEnter($event)"
+    (layerMouseLeave)="onTerritoryLeave()"
   />
   <mgl-layer
     id="territories-outline"
@@ -39,4 +43,21 @@
     source="territories"
     [paint]="territoryLinePaint"
   />
+  <mgl-geojson-source id="territory-labels" [data]="territoryDisplay().labels" />
+  <mgl-layer
+    id="territory-defense-labels"
+    type="symbol"
+    source="territory-labels"
+    [layout]="defenseLabelLayout"
+    [paint]="defenseLabelPaint"
+  />
+  <mgl-layer
+    id="territory-name-labels"
+    type="symbol"
+    source="territory-labels"
+    [minzoom]="nameMinZoom"
+    [layout]="nameLabelLayout"
+    [paint]="nameLabelPaint"
+  />
 </mgl-map>
+<router-outlet />

@@ -1,0 +1,93 @@
+:host {
+  display: block;
+  pointer-events: none;
+}
+
+.territory-panel {
+  pointer-events: auto;
+  position: fixed;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  background: #0f172a;
+  color: #f8fafc;
+  box-shadow: 0 0 24px rgb(0 0 0 / 35%);
+}
+
+.territory-panel__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 16px 12px;
+}
+
+.territory-panel__title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 650;
+  line-height: 1.3;
+}
+
+.territory-panel__close {
+  flex: none;
+  margin: 0;
+  padding: 0;
+  width: 2rem;
+  height: 2rem;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.territory-panel__close:hover,
+.territory-panel__close:focus-visible {
+  background: rgb(255 255 255 / 12%);
+  outline: none;
+}
+
+/* Keep in sync with SIDEBAR_* / BOTTOM_SHEET_* in territory-bounds.ts */
+/* Desktop: slide in from the right */
+@media (min-width: 768px) {
+  .territory-panel {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 360px;
+    animation: panel-in-right 180ms ease-out;
+  }
+}
+
+/* Narrow: bottom sheet */
+@media (max-width: 767px) {
+  .territory-panel {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    max-height: 40vh;
+    border-radius: 16px 16px 0 0;
+    animation: panel-in-up 180ms ease-out;
+  }
+}
+
+@keyframes panel-in-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes panel-in-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}

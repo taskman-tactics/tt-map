@@ -25,6 +25,25 @@ export {
   warnGeometryMismatches,
   type GeometryGroups,
 } from './territory-geometry';
+export {
+  NO_HOLDING_TEAM_COLOR,
+  buildTerritoryDisplay,
+  type TerritoryDisplay,
+} from './territory-display';
+export {
+  BOTTOM_SHEET_HEIGHT_RATIO,
+  SIDEBAR_BREAKPOINT_PX,
+  SIDEBAR_WIDTH_PX,
+  boundsForTerritory,
+  fitPaddingForPanel,
+  type FitPadding,
+  type LngLatBBox,
+} from './territory-bounds';
+export {
+  resolveTerritorySelection,
+  type TerritorySelection,
+} from './territory-selection';
+export { TerritorySidebar } from './territory-sidebar';
 export { TtAdminApi } from './tt-admin-api';
 export { ViewerDataService } from './viewer-data';
 export {

@@ -1,0 +1,15 @@
+@if (selection(); as selected) {
+  <aside class="territory-panel" role="dialog" [attr.aria-label]="selected.name">
+    <header class="territory-panel__header">
+      <h1 class="territory-panel__title">{{ selected.name }}</h1>
+      <button
+        type="button"
+        class="territory-panel__close"
+        aria-label="Close"
+        (click)="close()"
+      >
+        ×
+      </button>
+    </header>
+  </aside>
+}
