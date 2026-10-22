@@ -1,5 +1,6 @@
 import {
   Component,
+  computed,
   DestroyRef,
   HostListener,
   inject,
@@ -53,6 +54,7 @@ import {
   fetchTerritoryCollection,
   originTerritoryIdsNotInLocal,
   snapPolygonToBoardPixels,
+  territorySlugFor,
   toTerraDrawFeatures,
   toTerritoryCollection,
   type TerritoryCollection,
@@ -246,6 +248,11 @@ export class TerritoryAuthor {
   protected readonly mode = signal<'polygon' | 'select'>('select');
   protected readonly selectedName = signal('');
   protected readonly selectedIdPreview = signal('');
+  /** Override for the API slug; empty means "slug of name". */
+  protected readonly selectedTerritory = signal('');
+  protected readonly defaultTerritoryPreview = computed(() =>
+    slugifyTerritoryName(this.selectedName()),
+  );
   protected readonly selectedDrawIdSignal = signal<DrawFeatureId | null>(null);
   protected readonly hasSelection = signal(false);
   protected readonly originalTerritories = signal<TerritoryListItem[]>([]);
@@ -514,6 +521,10 @@ export class TerritoryAuthor {
     this.selectedIdPreview.set(this.previewIdForName(value));
   }
 
+  protected onTerritoryInput(value: string): void {
+    this.selectedTerritory.set(value);
+  }
+
   protected applyProperties(): void {
     if (!this.draw || this.selectedDrawId === null) {
       return;
@@ -532,8 +543,10 @@ export class TerritoryAuthor {
     }
 
     const id = uniqueTerritoryId(base, this.takenIdsExcluding(this.selectedDrawId));
-    this.draw.updateFeatureProperties(this.selectedDrawId, { id, name });
+    const territory = territorySlugFor(this.selectedTerritory(), name);
+    this.draw.updateFeatureProperties(this.selectedDrawId, { id, name, territory });
     this.selectedIdPreview.set(id);
+    this.selectedTerritory.set(territory === base ? '' : territory);
     this.clearPendingReopen();
     this.refreshTerritoryList();
     this.persistLocalDraft();
@@ -820,6 +833,10 @@ export class TerritoryAuthor {
     this.selectedIdPreview.set(
       String(feature?.properties?.['id'] ?? '') || this.previewIdForName(name),
     );
+    const territory = String(feature?.properties?.['territory'] ?? '');
+    this.selectedTerritory.set(
+      territory === slugifyTerritoryName(name) ? '' : territory,
+    );
   }
 
   private clearSelection(): void {
@@ -828,6 +845,7 @@ export class TerritoryAuthor {
     this.hasSelection.set(false);
     this.selectedName.set('');
     this.selectedIdPreview.set('');
+    this.selectedTerritory.set('');
   }
 
   private stashPendingReopen(id: DrawFeatureId): void {

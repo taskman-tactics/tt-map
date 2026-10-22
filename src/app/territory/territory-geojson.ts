@@ -5,11 +5,16 @@ import {
   snapLngLatToBoardPixel,
 } from '../board/board-pixel-snap';
 import { simplifyPolygonCollinear } from '../board/board-polygon-simplify';
+import { slugifyTerritoryName } from './territory-id';
 
-/** Stable Territory identity + display label (ADR-0002). */
+/**
+ * Stable polygon identity + display label (ADR-0002). `territory` is the API
+ * slug shared by every polygon of the same Territory; never derive it from `id`.
+ */
 export type TerritoryProperties = {
   id: string;
   name: string;
+  territory: string;
 };
 
 export type TerritoryFeature = Feature<Polygon, TerritoryProperties> & {
@@ -123,8 +128,15 @@ export function classifyTerritoryEditStatus(
 /** terra-draw requires `mode` on loaded features so they match PolygonMode. */
 export type TerraDrawPolygonFeature = Feature<
   Polygon,
-  { mode: 'polygon'; id: string; name: string }
+  { mode: 'polygon'; id: string; name: string; territory: string }
 >;
+
+/** Explicit `territory` when present, else the slug of `name` (what Apply assigns). */
+export function territorySlugFor(rawTerritory: unknown, name: string): string {
+  const explicit =
+    typeof rawTerritory === 'string' ? slugifyTerritoryName(rawTerritory) : '';
+  return explicit || slugifyTerritoryName(name);
+}
 
 function samePosition(a: Position, b: Position): boolean {
   return a[0] === b[0] && a[1] === b[1];
@@ -176,6 +188,7 @@ export function toTerraDrawFeatures(
       mode: 'polygon',
       id: feature.properties.id,
       name: feature.properties.name,
+      territory: feature.properties.territory,
     },
   }));
 }
@@ -200,6 +213,7 @@ export function toTerritoryCollection(features: Feature[]): {
     }
 
     const id = rawId.trim();
+    const name = typeof rawName === 'string' ? rawName : '';
     const closedOrSnapped = BOARD_PIXEL_SNAP_ENABLED
       ? snapPolygonToBoardPixels(feature.geometry)
       : closePolygonRings(feature.geometry);
@@ -208,7 +222,8 @@ export function toTerritoryCollection(features: Feature[]): {
       id,
       properties: {
         id,
-        name: typeof rawName === 'string' ? rawName : '',
+        name,
+        territory: territorySlugFor(feature.properties?.['territory'], name),
       },
       // Commit-time cleanup; live Author edits keep midpoints until dragged off-line.
       geometry: simplifyPolygonCollinear(closedOrSnapped),

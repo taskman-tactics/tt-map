@@ -55,7 +55,11 @@ describe('territory-local-storage', () => {
     ]);
 
     expect(collection.features).toHaveLength(1);
-    expect(collection.features[0]?.properties).toEqual({ id: '', name: '' });
+    expect(collection.features[0]?.properties).toEqual({
+      id: '',
+      name: '',
+      territory: '',
+    });
   });
 
   it('round-trips a draft through Storage', () => {
@@ -63,7 +67,12 @@ describe('territory-local-storage', () => {
     const collection = snapshotToDraftCollection([
       {
         type: 'Feature',
-        properties: { mode: 'polygon', id: 'alaska', name: 'Alaska' },
+        properties: {
+          mode: 'polygon',
+          id: 'alaska',
+          name: 'Alaska',
+          territory: 'alaska',
+        },
         geometry: {
           type: 'Polygon',
           coordinates: [
@@ -86,6 +95,7 @@ describe('territory-local-storage', () => {
     expect(loaded?.features[0]?.properties).toEqual({
       id: 'alaska',
       name: 'Alaska',
+      territory: 'alaska',
     });
 
     clearLocalTerritoryCollection(storage);

@@ -2,7 +2,7 @@
 
 ### Issue tracker
 
-Issues live in GitHub Issues for `rmobis/tt-map` (via `gh`). See `docs/agents/issue-tracker.md`.
+Issues live in GitHub Issues for `taskman-tactics/tt-map` (via `gh`). See `docs/agents/issue-tracker.md`.
 
 ### Triage labels
 

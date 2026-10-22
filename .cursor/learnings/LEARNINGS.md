@@ -54,6 +54,18 @@ A “LngLat = pixel/N” box makes basemap rows warp under MapLibre’s Mercator
 
 `TerritoryCollection` features are GeoJSON `Feature` (`id?: string | number`), while our `TerritoryFeature` requires `id: string`. Unit tests that construct `TerritoryFeature` directly won’t catch assigning `collection.features` into a `Map<string, TerritoryFeature>`. After wiring origin/draft maps from FeatureCollections, confirm `ng serve` / the Angular compiler succeeds — Vitest alone is not enough.
 
+## 2026-10-22: Author export rebuilds properties; new GeoJSON fields need Author plumbing
+
+**Action:** pending
+
+`toTerritoryCollection`, `toTerraDrawFeatures` and `snapshotToDraftCollection` each rebuild Feature properties from an explicit list. A property added only to `public/territories.geojson` (e.g. `territory`) is silently dropped on the next Author load/export. When adding a GeoJSON property, thread it through all three and the Author UI in the same change.
+
+## 2026-10-22: PowerShell splits `gh api -F key=$(...)` into two args
+
+**Action:** pending
+
+In PowerShell, `gh api ... -F issue_id=(Some-Expr)` passes `issue_id=` and the value as separate arguments (`accepts 1 arg(s), received 2`). Build the field first (`$f = "issue_id=$id"`) and pass `-F $f`.
+
 ## 2026-10-14: do not collinear-simplify on insertMidpoint finish
 
 **Action:** applied → `.cursor/rules/terra-draw-authoring.mdc`

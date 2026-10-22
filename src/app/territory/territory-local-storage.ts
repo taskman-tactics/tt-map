@@ -43,13 +43,15 @@ export function snapshotToDraftCollection(
 
     const rawId = feature.properties?.['id'];
     const rawName = feature.properties?.['name'];
+    const rawTerritory = feature.properties?.['territory'];
     const id = typeof rawId === 'string' ? rawId.trim() : '';
     const name = typeof rawName === 'string' ? rawName : '';
+    const territory = typeof rawTerritory === 'string' ? rawTerritory : '';
 
     territories.push({
       type: 'Feature',
       id: id || `draft-${territories.length}`,
-      properties: { id, name },
+      properties: { id, name, territory },
       geometry: closePolygonRings(feature.geometry),
     });
   }

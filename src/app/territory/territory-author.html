@@ -55,6 +55,16 @@
       <p class="id-preview">
         id: <code>{{ selectedIdPreview() || '—' }}</code>
       </p>
+      <label>
+        territory slug
+        <input
+          type="text"
+          [value]="selectedTerritory()"
+          [placeholder]="defaultTerritoryPreview() || 'from name'"
+          (input)="onTerritoryInput($any($event.target).value)"
+          autocomplete="off"
+        />
+      </label>
       <button type="button" class="primary" (click)="applyProperties()">
         Apply
       </button>

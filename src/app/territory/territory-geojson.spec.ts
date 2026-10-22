@@ -20,7 +20,7 @@ function territoryCollection(
     features: ids.map((id) => ({
       type: 'Feature',
       id,
-      properties: { id, name: id },
+      properties: { id, name: id, territory: id },
       geometry: {
         type: 'Polygon',
         coordinates: [
@@ -82,7 +82,44 @@ describe('territory-geojson', () => {
     expect(collection.features[0]?.properties).toEqual({
       id: 'alaska',
       name: 'Alaska',
+      territory: 'alaska',
     });
+  });
+
+  it('groups extra polygons under the named Territory slug and keeps overrides', () => {
+    const square = {
+      type: 'Polygon' as const,
+      coordinates: [
+        [
+          [0, 0],
+          [1, 0],
+          [1, 1],
+          [0, 0],
+        ],
+      ],
+    };
+    const { collection } = toTerritoryCollection([
+      {
+        type: 'Feature',
+        properties: { mode: 'polygon', id: 'barrows-2', name: 'Barrows' },
+        geometry: square,
+      },
+      {
+        type: 'Feature',
+        properties: {
+          mode: 'polygon',
+          id: 'zone-2',
+          name: 'Zone 2',
+          territory: 'zone-2',
+        },
+        geometry: square,
+      },
+    ]);
+
+    expect(collection.features.map((f) => f.properties.territory)).toEqual([
+      'barrows',
+      'zone-2',
+    ]);
   });
 
   it('round-trips into terra-draw polygon features', () => {
@@ -92,7 +129,7 @@ describe('territory-geojson', () => {
         {
           type: 'Feature',
           id: 'brazil',
-          properties: { id: 'brazil', name: 'Brazil' },
+          properties: { id: 'brazil', name: 'Brazil', territory: 'brazil' },
           geometry: {
             type: 'Polygon',
             coordinates: [
@@ -112,7 +149,12 @@ describe('territory-geojson', () => {
       {
         type: 'Feature',
         geometry: loaded.features[0]?.geometry,
-        properties: { mode: 'polygon', id: 'brazil', name: 'Brazil' },
+        properties: {
+          mode: 'polygon',
+          id: 'brazil',
+          name: 'Brazil',
+          territory: 'brazil',
+        },
       },
     ]);
   });
@@ -222,7 +264,7 @@ describe('territory-geojson', () => {
     const originFeature: TerritoryFeature = {
       type: 'Feature',
       id: 'alaska',
-      properties: { id: 'alaska', name: 'Alaska' },
+      properties: { id: 'alaska', name: 'Alaska', territory: 'alaska' },
       geometry: originGeom,
     };
     const originById = new Map([['alaska', originFeature]]);
