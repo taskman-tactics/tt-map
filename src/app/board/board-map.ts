@@ -29,6 +29,7 @@ import type {
 import { LngLatBounds } from 'maplibre-gl';
 import { filter, map, startWith } from 'rxjs';
 import {
+  Scoreboard,
   ViewerDataService,
   buildTerritoryDisplay,
   boundsForTerritory,
@@ -42,6 +43,7 @@ import {
   BOARD_IMAGE_COORDINATES,
   BOARD_MAX_BOUNDS,
 } from './board-coordinates';
+import { teamIdFromSnapshot } from './team-route-id';
 import { territorySlugFromSnapshot } from './territory-route-slug';
 
 /** Mid zoom at which Territory names appear above Defense labels. */
@@ -60,6 +62,7 @@ const TERRITORIES_FILL_LAYER = 'territories-fill';
     ControlComponent,
     NavigationControlDirective,
     RouterOutlet,
+    Scoreboard,
   ],
   templateUrl: './board-map.html',
   styleUrl: './board-map.scss',
@@ -168,6 +171,15 @@ export class BoardMap {
     { initialValue: this.readSelectedSlug() },
   );
 
+  private readonly selectedTeamId = toSignal(
+    this.router.events.pipe(
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+      startWith(null),
+      map(() => this.readSelectedTeamId()),
+    ),
+    { initialValue: this.readSelectedTeamId() },
+  );
+
   protected readonly territoryDisplay = computed((): TerritoryDisplay => {
     const state = this.viewer.state();
     if (state.status !== 'ready') {
@@ -210,7 +222,7 @@ export class BoardMap {
       if (event.key !== 'Escape') {
         return;
       }
-      if (this.selectedSlug()) {
+      if (this.selectedSlug() || this.selectedTeamId()) {
         void this.router.navigate(['/']);
       }
     };
@@ -260,7 +272,7 @@ export class BoardMap {
   }
 
   protected onMapClick(event: MapMouseEvent): void {
-    if (!this.selectedSlug() || !this.map) {
+    if ((!this.selectedSlug() && !this.selectedTeamId()) || !this.map) {
       return;
     }
     const hits = this.map.queryRenderedFeatures(event.point, {
@@ -274,6 +286,10 @@ export class BoardMap {
 
   private readSelectedSlug(): string | null {
     return territorySlugFromSnapshot(this.router.routerState.snapshot.root);
+  }
+
+  private readSelectedTeamId(): string | null {
+    return teamIdFromSnapshot(this.router.routerState.snapshot.root);
   }
 
   private featureIdsForSlug(slug: string): string[] {

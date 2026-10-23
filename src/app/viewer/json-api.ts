@@ -54,16 +54,20 @@ function stringAttr(value: unknown, fallback = ''): string {
   return typeof value === 'string' ? value : fallback;
 }
 
+function optionalUrlAttr(value: unknown): string | null {
+  return typeof value === 'string' && value.length > 0 ? value : null;
+}
+
 export function normalizeTeams(document: JsonApiDocument): Team[] {
   return asList(document.data).map((resource) => {
     const a = attrs(resource);
-    const iconUrl = a['icon_url'];
     return {
       id: stringId(resource.id),
       name: stringAttr(a['name']),
       color: stringAttr(a['color']),
       points: numberAttr(a['points']),
-      iconUrl: typeof iconUrl === 'string' && iconUrl.length > 0 ? iconUrl : null,
+      avatarUrl: optionalUrlAttr(a['avatar_url']),
+      iconUrl: optionalUrlAttr(a['icon_url']),
     };
   });
 }

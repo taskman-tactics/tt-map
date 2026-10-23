@@ -65,6 +65,16 @@ export {
   resolveTaskDeepLink,
   type TaskDeepLink,
 } from './task-deep-link';
+export {
+  rankLabel,
+  scoreboardEntries,
+  type ScoreboardEntry,
+  type ScoreboardInput,
+} from './scoreboard-model';
+export { teamAvatarUrl } from './team-avatar';
+export { orderTeamPlayers, playerRankLabel } from './team-players';
+export { Scoreboard } from './scoreboard';
+export { TeamSidebar } from './team-sidebar';
 export { TerritorySidebar } from './territory-sidebar';
 export { TtAdminApi } from './tt-admin-api';
 export { ViewerDataService } from './viewer-data';

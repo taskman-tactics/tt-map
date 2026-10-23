@@ -32,12 +32,13 @@ describe('normalizeTeams', () => {
         name: "Armadyl's Aggressive Aviansies",
         color: '#1C78E0',
         points: 12,
+        avatarUrl: 'https://cdn.example.com/armadyl-avatar.webp',
         iconUrl: 'https://cdn.example.com/armadyl.webp',
       },
     ]);
   });
 
-  it('treats a missing or empty icon_url as null (ignores avatar_url)', () => {
+  it('treats a missing or empty avatar_url and icon_url as null', () => {
     const teams = normalizeTeams({
       data: [
         {
@@ -47,12 +48,13 @@ describe('normalizeTeams', () => {
             name: 'Goats',
             color: '#E3B833',
             points: 3,
-            avatar_url: 'https://cdn.example.com/goat-avatar.webp',
+            avatar_url: '',
           },
         },
       ],
     });
 
+    expect(teams[0]?.avatarUrl).toBeNull();
     expect(teams[0]?.iconUrl).toBeNull();
   });
 });

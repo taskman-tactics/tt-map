@@ -11,6 +11,8 @@ export type Team = {
   name: string;
   color: string;
   points: number;
+  /** Team portrait URL from the API (`avatar_url`). */
+  avatarUrl: string | null;
   /** Team crest / mark URL from the API (`icon_url`). */
   iconUrl: string | null;
 };

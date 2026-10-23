@@ -3,7 +3,7 @@ import type { Region, Team, Territory } from './domain';
 import { regionHolder } from './region-holder';
 
 function team(id: string, name = id): Team {
-  return { id, name, color: '#000', points: 0, iconUrl: null };
+  return { id, name, color: '#000', points: 0, avatarUrl: null, iconUrl: null };
 }
 
 function territory(

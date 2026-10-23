@@ -1,0 +1,100 @@
+@if (teamId(); as id) {
+  <aside
+    class="team-panel"
+    role="dialog"
+    [attr.aria-label]="panelTitle()"
+    [style.--team-color]="team()?.color ?? '#a1a1aa'"
+  >
+    <header class="team-panel__header">
+      <div class="team-panel__heading">
+        <div class="team-panel__identity">
+          <span class="team-panel__avatar" aria-hidden="true">
+            @if (avatarSrc(); as src) {
+              <img [src]="src" alt="" width="48" height="48" />
+            } @else {
+              <span class="team-panel__avatar-fallback">{{
+                panelTitle().charAt(0)
+              }}</span>
+            }
+          </span>
+          <div class="team-panel__titles">
+            <h1 class="team-panel__title">{{ panelTitle() }}</h1>
+            @if (team(); as t) {
+              <p class="team-panel__stats">
+                <span class="team-panel__points">{{ t.points }} Points</span>
+                @if (rankText(); as label) {
+                  <span class="team-panel__rank">{{ label }}</span>
+                }
+              </p>
+            } @else if (ready()) {
+              <p class="team-panel__stats">Team not found</p>
+            }
+          </div>
+        </div>
+      </div>
+      <button
+        type="button"
+        class="team-panel__close"
+        aria-label="Close"
+        (click)="close()"
+      >
+        ×
+      </button>
+    </header>
+
+    <div class="team-panel__body">
+      <section class="team-panel__section" aria-label="Territories held">
+        <h2 class="team-panel__section-title">
+          Territories ({{ heldTerritories().length }})
+        </h2>
+        @if (heldTerritories().length === 0) {
+          <p class="team-panel__empty">No Territories held</p>
+        } @else {
+          <ul class="team-panel__list">
+            @for (territory of heldTerritories(); track territory.id) {
+              <li>
+                <a
+                  class="team-panel__link"
+                  [routerLink]="['/territories', territory.slug]"
+                >
+                  {{ territory.name }}
+                </a>
+              </li>
+            }
+          </ul>
+        }
+      </section>
+
+      <section class="team-panel__section" aria-label="Players">
+        <h2 class="team-panel__section-title">
+          Players ({{ players().length }})
+        </h2>
+        @if (players().length === 0) {
+          <p class="team-panel__empty">No Players</p>
+        } @else {
+          <ul class="team-panel__players">
+            @for (player of players(); track player.id) {
+              <li class="team-panel__player">
+                <img
+                  class="team-panel__player-avatar"
+                  [src]="player.avatarUrl"
+                  alt=""
+                  width="28"
+                  height="28"
+                />
+                <span class="team-panel__player-name">{{ player.name }}</span>
+                <span class="team-panel__player-rank">{{
+                  playerRankLabel(player.rank)
+                }}</span>
+              </li>
+            }
+          </ul>
+        }
+      </section>
+
+      <section class="team-panel__event-log" aria-label="Event Log">
+        <!-- Reserved for a future Event Log issue. -->
+      </section>
+    </div>
+  </aside>
+}

@@ -8,7 +8,7 @@ import {
 } from './viewer-poller';
 
 function team(id: string, points = 0): Team {
-  return { id, name: id, color: '#000', points, iconUrl: null };
+  return { id, name: id, color: '#000', points, avatarUrl: null, iconUrl: null };
 }
 
 function territory(id: string, holdingTeamId: string | null = null): Territory {
