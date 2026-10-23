@@ -11671,11 +11671,11 @@
     },
     {
       "type": "Feature",
-      "id": "fortis-colloseum",
+      "id": "fortis-colosseum",
       "properties": {
-        "id": "fortis-colloseum",
-        "name": "Fortis Colloseum",
-        "territory": "fortis-colloseum"
+        "id": "fortis-colosseum",
+        "name": "Fortis Colosseum",
+        "territory": "fortis-colosseum"
       },
       "geometry": {
         "type": "Polygon",
