@@ -1,4 +1,6 @@
 @import 'maplibre-gl/dist/maplibre-gl.css';
+@import 'tippy.js/dist/tippy.css';
+@import 'tippy.js/animations/scale.css';
 
 html,
 body {
@@ -6,5 +8,46 @@ body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: #31a2f2;
+  background: #0a0a0b;
+  color-scheme: dark;
+}
+
+/* Dark theme for @ngneat/helipopper / Tippy */
+.tippy-box[data-theme~='tt-dark'] {
+  background: #1c1c1f;
+  color: #f4f4f5;
+  border: 1px solid rgb(255 255 255 / 10%);
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1.35;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 45%);
+}
+
+.tippy-box[data-theme~='tt-dark'] .tippy-content {
+  padding: 7px 10px;
+}
+
+.tippy-box[data-theme~='tt-dark'][data-placement^='top'] > .tippy-arrow::before {
+  border-top-color: #1c1c1f;
+}
+
+.tippy-box[data-theme~='tt-dark'][data-placement^='bottom'] > .tippy-arrow::before {
+  border-bottom-color: #1c1c1f;
+}
+
+.tippy-box[data-theme~='tt-dark'][data-placement^='left'] > .tippy-arrow::before {
+  border-left-color: #1c1c1f;
+}
+
+.tippy-box[data-theme~='tt-dark'][data-placement^='right'] > .tippy-arrow::before {
+  border-right-color: #1c1c1f;
+}
+
+.tt-tip__muted {
+  color: #a1a1aa;
+}
+
+.tt-tip strong {
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
 }

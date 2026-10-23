@@ -31,6 +31,7 @@ describe('groupTerritoryTasks', () => {
       activity('a2', 'Zulrah', 't1'),
       activity('a1', 'Cerberus', 't1'),
       activity('a3', 'Other', 't2'),
+      activity('a4', 'Empty', 't1'),
     ];
     const tasks = [
       task('k2', 'Jar', 'a1', { attackDiceRoll: '1d4', strategy: 'regular' }),
@@ -46,26 +47,32 @@ describe('groupTerritoryTasks', () => {
       {
         activityId: 'a1',
         activityName: 'Cerberus',
-        taskId: 'k1',
-        taskName: 'Crystal',
-        attackDiceRoll: '1d8',
-        strategy: 'machine-gun',
-      },
-      {
-        activityId: 'a1',
-        activityName: 'Cerberus',
-        taskId: 'k2',
-        taskName: 'Jar',
-        attackDiceRoll: '1d4',
-        strategy: 'regular',
+        tasks: [
+          {
+            taskId: 'k1',
+            taskName: 'Crystal',
+            attackDiceRoll: '1d8',
+            strategy: 'machine-gun',
+          },
+          {
+            taskId: 'k2',
+            taskName: 'Jar',
+            attackDiceRoll: '1d4',
+            strategy: 'regular',
+          },
+        ],
       },
       {
         activityId: 'a2',
         activityName: 'Zulrah',
-        taskId: 'k3',
-        taskName: 'Pet',
-        attackDiceRoll: '1d6',
-        strategy: 'regular',
+        tasks: [
+          {
+            taskId: 'k3',
+            taskName: 'Pet',
+            attackDiceRoll: '1d6',
+            strategy: 'regular',
+          },
+        ],
       },
     ]);
   });

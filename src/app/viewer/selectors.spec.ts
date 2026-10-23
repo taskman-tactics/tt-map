@@ -7,7 +7,7 @@ import {
 } from './selectors';
 
 function team(id: string, points: number): Team {
-  return { id, name: id, color: '#000', points };
+  return { id, name: id, color: '#000', points, iconUrl: null };
 }
 
 function territory(

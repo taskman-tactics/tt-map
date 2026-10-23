@@ -1,5 +1,10 @@
 @if (selection(); as selected) {
-  <aside class="territory-panel" role="dialog" [attr.aria-label]="selected.name">
+  <aside
+    class="territory-panel"
+    role="dialog"
+    [attr.aria-label]="selected.name"
+    [style.--holding-color]="outlineColor()"
+  >
     <header class="territory-panel__header">
       <div class="territory-panel__heading">
         <h1 class="territory-panel__title">{{ selected.name }}</h1>
@@ -21,8 +26,9 @@
 
     <div class="territory-panel__body">
       <section class="territory-panel__thumb" aria-label="Territory thumbnail">
-        @if (thumbnail(); as thumb) {
-          <svg
+        <div class="territory-panel__thumb-frame">
+          @if (thumbnail(); as thumb) {
+            <svg
               class="territory-thumb"
               [attr.viewBox]="
                 thumb.viewBox.x +
@@ -77,88 +83,158 @@
                 />
               }
             </svg>
-        } @else {
-          <div class="territory-thumb territory-thumb--placeholder">
-            No geometry
-          </div>
-        }
+          } @else {
+            <div class="territory-thumb territory-thumb--placeholder">
+              No geometry
+            </div>
+          }
+          @if (region(); as reg) {
+            <span class="territory-panel__region-name">{{ reg.name }}</span>
+          }
+        </div>
       </section>
 
-      @if (region(); as reg) {
+      @if (regionHeldBy(); as holder) {
         <section class="territory-panel__region">
-          <span class="territory-panel__region-name">{{ reg.name }}</span>
-          @if (regionHeldBy(); as holder) {
-            <span class="territory-panel__region-badge">
-              Region held by {{ holder.name }}
-            </span>
-          }
+          <span class="territory-panel__region-badge">
+            Region held by {{ holder.name }}
+          </span>
         </section>
       }
 
       <section class="territory-panel__holding">
         @if (holdingTeam(); as team) {
-          <a class="territory-panel__team" [routerLink]="['/teams', team.id]">
-            {{ team.name }}
-          </a>
-          @if (heldLabel(); as held) {
+          @if (holdProgress(); as progress) {
+            <ng-template #holdTip>
+              <span class="tt-tip">
+                +1 point in
+                <strong>{{ progress.timeToThreshold }}</strong>
+                <span class="tt-tip__muted">
+                  (held by {{ progress.timeHeld }})
+                </span>
+              </span>
+            </ng-template>
             <span
-              class="territory-panel__held"
-              [attr.title]="held.title"
+              class="territory-panel__hold-progress"
+              [tp]="holdTip"
+              tpPlacement="top"
+              [attr.aria-label]="
+                '+1 point in ' +
+                progress.timeToThreshold +
+                ' (held by ' +
+                progress.timeHeld +
+                ')'
+              "
             >
-              {{ held.text }}
+              <svg
+                class="territory-panel__hold-ring"
+                viewBox="0 0 36 36"
+                aria-hidden="true"
+              >
+                <circle
+                  class="territory-panel__hold-ring-track"
+                  cx="18"
+                  cy="18"
+                  [attr.r]="holdRing.radius"
+                  fill="none"
+                />
+                <circle
+                  class="territory-panel__hold-ring-value"
+                  cx="18"
+                  cy="18"
+                  [attr.r]="holdRing.radius"
+                  fill="none"
+                  [attr.stroke-dasharray]="holdRing.circumference"
+                  [attr.stroke-dashoffset]="holdRingOffset(progress.ratio)"
+                  transform="rotate(-90 18 18)"
+                />
+              </svg>
             </span>
           }
+          <a class="territory-panel__team" [routerLink]="['/teams', team.id]">
+            <span class="territory-panel__team-mark">
+              @if (team.iconUrl) {
+                <img
+                  class="territory-panel__team-icon"
+                  [src]="team.iconUrl"
+                  alt=""
+                  width="20"
+                  height="20"
+                />
+              }
+              <span class="territory-panel__team-name">{{ team.name }}</span>
+            </span>
+          </a>
         } @else {
           <span class="territory-panel__unclaimed">Unclaimed</span>
         }
       </section>
 
       <section class="territory-panel__tasks" aria-label="Tasks">
-        <h2 class="territory-panel__section-title">Tasks</h2>
-        @if (taskLines().length === 0) {
-          <p class="territory-panel__empty">No Tasks</p>
-        } @else {
-          <ul class="territory-panel__task-list">
-            @for (line of taskLines(); track line.taskId; let i = $index) {
-              <li
-                class="territory-panel__task"
-                [class.territory-panel__task--highlight]="
-                  isHighlighted('task', line.taskId) ||
-                  isHighlighted('activity', line.activityId)
-                "
-                [attr.id]="'task-' + line.taskId"
-                [attr.data-activity-id]="line.activityId"
-              >
-                @if (isFirstOfActivity(i)) {
-                  <span
-                    class="territory-panel__activity-anchor"
-                    [attr.id]="'activity-' + line.activityId"
-                  ></span>
-                }
-                <strong>{{ line.activityName }}</strong>:
-                {{ line.taskName }}
-                <em>({{ line.attackDiceRoll }})</em>
-                @if (line.strategy === 'machine-gun') {
-                  <span
-                    class="territory-panel__strategy"
-                    title="Machine-Gun Task"
-                    aria-label="Machine-Gun Task"
-                  >
-                    <svg
-                      class="territory-panel__strategy-icon"
-                      viewBox="0 0 16 16"
-                      aria-hidden="true"
-                    >
-                      <path
-                        fill="currentColor"
-                        d="M1 7h2l1-2h3l1 2h5v2H9l-1 2H5L4 9H1V7zm3 5h2v2H4v-2zm6 0h2v2h-2v-2z"
-                      />
-                    </svg>
-                  </span>
-                }
-              </li>
-            }
-          </ul>
+        <button
+          type="button"
+          class="territory-panel__section-toggle"
+          (click)="toggleTasks()"
+          [attr.aria-expanded]="tasksOpen()"
+        >
+          <span class="territory-panel__section-title"
+            >Tasks ({{ taskCount() }})</span>
+          <span class="territory-panel__section-chevron" aria-hidden="true">
+            {{ tasksOpen() ? '▾' : '▸' }}
+          </span>
+        </button>
+        @if (tasksOpen()) {
+          @if (taskGroups().length === 0) {
+            <p class="territory-panel__empty">No Tasks</p>
+          } @else {
+            <div class="territory-panel__activity-list">
+              @for (group of taskGroups(); track group.activityId) {
+                <article
+                  class="territory-panel__activity"
+                  [class.territory-panel__activity--highlight]="
+                    isHighlighted('activity', group.activityId)
+                  "
+                  [attr.id]="'activity-' + group.activityId"
+                >
+                  <h3 class="territory-panel__activity-name">
+                    {{ group.activityName }}
+                  </h3>
+                  <ul class="territory-panel__task-list">
+                    @for (task of group.tasks; track task.taskId) {
+                      <li
+                        class="territory-panel__task"
+                        [class.territory-panel__task--highlight]="
+                          isHighlighted('task', task.taskId)
+                        "
+                        [attr.id]="'task-' + task.taskId"
+                      >
+                        {{ task.taskName }}
+                        <em>({{ task.attackDiceRoll }})</em>
+                        @if (task.strategy === 'machine-gun') {
+                          <span
+                            class="territory-panel__strategy"
+                            title="Machine-Gun Task"
+                            aria-label="Machine-Gun Task"
+                          >
+                            <svg
+                              class="territory-panel__strategy-icon"
+                              viewBox="0 0 16 16"
+                              aria-hidden="true"
+                            >
+                              <path
+                                fill="currentColor"
+                                d="M1 7h2l1-2h3l1 2h5v2H9l-1 2H5L4 9H1V7zm3 5h2v2H4v-2zm6 0h2v2h-2v-2z"
+                              />
+                            </svg>
+                          </span>
+                        }
+                      </li>
+                    }
+                  </ul>
+                </article>
+              }
+            </div>
+          }
         }
       </section>
 

@@ -1,22 +1,27 @@
 import type { Activity, Task } from './domain';
 
-export type TerritoryTaskLine = {
-  activityId: string;
-  activityName: string;
+export type TerritoryTaskItem = {
   taskId: string;
   taskName: string;
   attackDiceRoll: string;
   strategy: string;
 };
 
+export type TerritoryActivityGroup = {
+  activityId: string;
+  activityName: string;
+  tasks: TerritoryTaskItem[];
+};
+
 /**
- * Flat Task lines for a Territory, Activities A→Z then Tasks A→Z within.
+ * Activity cards for a Territory: Activities A→Z, Tasks A→Z within each.
+ * Activities with no Tasks are omitted.
  */
 export function groupTerritoryTasks(
   activities: readonly Activity[],
   tasks: readonly Task[],
   territoryId: string,
-): TerritoryTaskLine[] {
+): TerritoryActivityGroup[] {
   const forTerritory = activities
     .filter((a) => a.territoryId === territoryId)
     .sort((a, b) => a.name.localeCompare(b.name));
@@ -34,21 +39,24 @@ export function groupTerritoryTasks(
     }
   }
 
-  const lines: TerritoryTaskLine[] = [];
+  const groups: TerritoryActivityGroup[] = [];
   for (const activity of forTerritory) {
     const activityTasks = [...(byActivity.get(activity.id) ?? [])].sort(
       (a, b) => a.name.localeCompare(b.name),
     );
-    for (const task of activityTasks) {
-      lines.push({
-        activityId: activity.id,
-        activityName: activity.name,
+    if (activityTasks.length === 0) {
+      continue;
+    }
+    groups.push({
+      activityId: activity.id,
+      activityName: activity.name,
+      tasks: activityTasks.map((task) => ({
         taskId: task.id,
         taskName: task.name,
         attackDiceRoll: task.attackDiceRoll,
         strategy: task.strategy,
-      });
-    }
+      })),
+    });
   }
-  return lines;
+  return groups;
 }

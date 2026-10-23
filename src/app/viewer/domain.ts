@@ -11,6 +11,8 @@ export type Team = {
   name: string;
   color: string;
   points: number;
+  /** Team crest / mark URL from the API (`icon_url`). */
+  iconUrl: string | null;
 };
 
 export type Region = {

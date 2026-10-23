@@ -11,13 +11,18 @@ import {
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { TippyDirective } from '@ngneat/helipopper';
 import { map } from 'rxjs';
 import {
   BOARD_HEIGHT_PX,
   BOARD_WIDTH_PX,
 } from '../board/board-coordinates';
 import { NO_HOLDING_TEAM_COLOR } from './territory-display';
-import { formatHeldDuration } from './held-duration';
+import {
+  formatHeldDuration,
+  holdCycleProgressRatio,
+  holdCycleRemainingMs,
+} from './held-duration';
 import { regionHolder } from './region-holder';
 import { resolveTaskDeepLink } from './task-deep-link';
 import { resolveTerritorySelection } from './territory-selection';
@@ -33,7 +38,7 @@ const DEEP_LINK_RETRY_MS = 50;
 
 @Component({
   selector: 'app-territory-sidebar',
-  imports: [RouterLink],
+  imports: [RouterLink, TippyDirective],
   templateUrl: './territory-sidebar.html',
   styleUrl: './territory-sidebar.scss',
 })
@@ -72,6 +77,7 @@ export class TerritorySidebar {
 
   private readonly nowMs = signal(Date.now());
   private readonly highlightKey = signal<string | null>(null);
+  protected readonly tasksOpen = signal(true);
   private lastDeepLinkKey: string | null = null;
 
   protected readonly selection = computed(() => {
@@ -146,26 +152,28 @@ export class TerritorySidebar {
     return thumbnailModel(selected.features);
   });
 
-  protected readonly heldLabel = computed(() => {
-    const territory = this.selection()?.territory;
-    if (!territory || territory.holdingTeamId == null) {
+  /** 8h-cycle ring for the Holding Team row (needs a known `capturedAt`). */
+  protected readonly holdProgress = computed(() => {
+    if (!this.holdingTeam()) {
       return null;
     }
-    if (territory.capturedAt == null) {
-      return { text: 'Held since event start', title: null as string | null };
+    const territory = this.selection()?.territory;
+    if (!territory?.capturedAt) {
+      return null;
     }
     const capturedMs = Date.parse(territory.capturedAt);
     if (Number.isNaN(capturedMs)) {
-      return { text: 'Held since event start', title: null };
+      return null;
     }
     const elapsed = Math.max(0, this.nowMs() - capturedMs);
     return {
-      text: `held for ${formatHeldDuration(elapsed)}`,
-      title: new Date(capturedMs).toLocaleString(),
+      ratio: holdCycleProgressRatio(elapsed),
+      timeToThreshold: formatHeldDuration(holdCycleRemainingMs(elapsed)),
+      timeHeld: formatHeldDuration(elapsed),
     };
   });
 
-  protected readonly taskLines = computed(() => {
+  protected readonly taskGroups = computed(() => {
     const selected = this.selection();
     const state = this.ready();
     const territoryId = selected?.territory?.id;
@@ -174,6 +182,21 @@ export class TerritorySidebar {
     }
     return groupTerritoryTasks(state.activities, state.tasks, territoryId);
   });
+
+  protected readonly taskCount = computed(() =>
+    this.taskGroups().reduce((sum, group) => sum + group.tasks.length, 0),
+  );
+
+  /** SVG ring math for the 8h hold cycle indicator (r = 15 in a 36×36 viewBox). */
+  protected readonly holdRing = {
+    radius: 15,
+    circumference: 2 * Math.PI * 15,
+  };
+
+  protected holdRingOffset(ratio: number): number {
+    const t = Math.min(1, Math.max(0, ratio));
+    return this.holdRing.circumference * (1 - t);
+  }
 
   constructor() {
     const tick = setInterval(
@@ -184,9 +207,9 @@ export class TerritorySidebar {
 
     effect(() => {
       const target = this.deepLink();
-      const lines = this.taskLines();
+      const groups = this.taskGroups();
       const slug = this.slug();
-      if (!target || lines.length === 0) {
+      if (!target || groups.length === 0) {
         return;
       }
       const appliedKey =
@@ -196,6 +219,7 @@ export class TerritorySidebar {
       if (this.lastDeepLinkKey === appliedKey) {
         return;
       }
+      this.tasksOpen.set(true);
       afterNextRender(
         () => {
           this.tryDeepLink(target, appliedKey, 0);
@@ -209,20 +233,16 @@ export class TerritorySidebar {
     void this.router.navigate(['/']);
   }
 
+  protected toggleTasks(): void {
+    this.tasksOpen.update((open) => !open);
+  }
+
   protected pointsAttr(ring: readonly [number, number][]): string {
     return ring.map(([x, y]) => `${x},${y}`).join(' ');
   }
 
   protected isHighlighted(kind: 'task' | 'activity', id: string): boolean {
     return this.highlightKey() === `${kind}:${id}`;
-  }
-
-  protected isFirstOfActivity(index: number): boolean {
-    const lines = this.taskLines();
-    if (index === 0) {
-      return true;
-    }
-    return lines[index]?.activityId !== lines[index - 1]?.activityId;
   }
 
   private tryDeepLink(
@@ -256,7 +276,10 @@ export class TerritorySidebar {
     if (!(el instanceof HTMLElement)) {
       return false;
     }
-    const row = el.closest('.territory-panel__task') ?? el;
+    const row =
+      el.closest('.territory-panel__task') ??
+      el.closest('.territory-panel__activity') ??
+      el;
     if (row instanceof HTMLElement) {
       row.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
     }

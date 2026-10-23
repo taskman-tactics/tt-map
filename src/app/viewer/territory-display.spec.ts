@@ -8,7 +8,7 @@ import {
 import type { TerritoryCollection } from '../territory/territory-geojson';
 
 function team(id: string, color: string): Team {
-  return { id, name: id, color, points: 0 };
+  return { id, name: id, color, points: 0, iconUrl: null };
 }
 
 function territory(

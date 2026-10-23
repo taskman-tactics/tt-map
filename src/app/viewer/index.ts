@@ -43,11 +43,17 @@ export {
   resolveTerritorySelection,
   type TerritorySelection,
 } from './territory-selection';
-export { formatHeldDuration } from './held-duration';
+export {
+  HOLD_CYCLE_MS,
+  formatHeldDuration,
+  holdCycleProgressRatio,
+  holdCycleRemainingMs,
+} from './held-duration';
 export { regionHolder } from './region-holder';
 export {
   groupTerritoryTasks,
-  type TerritoryTaskLine,
+  type TerritoryActivityGroup,
+  type TerritoryTaskItem,
 } from './territory-tasks';
 export {
   THUMBNAIL_PAD_PX,
