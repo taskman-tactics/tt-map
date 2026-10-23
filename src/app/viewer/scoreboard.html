@@ -1,97 +1,88 @@
 @if (entries().length > 0) {
-  <nav class="scoreboard" aria-label="Scoreboard">
-    <div class="scoreboard__side scoreboard__side--left">
-      @for (entry of leftEntries(); track entry.team.id) {
-        <ng-template #tip>
-          <span class="tt-tip">
-            <strong>{{ rankLabel(entry.rank) }}</strong>
-            · {{ entry.territoriesHeld }} Territories
-            · {{ entry.regionsHeld }} Regions
-            · {{ entry.playerCount }} Players
-          </span>
-        </ng-template>
-        <a
-          class="scoreboard__team"
-          [routerLink]="['/teams', entry.team.id]"
-          [style.--team-color]="entry.team.color"
-          [tp]="tip"
-          tpPlacement="bottom"
-          tpTrigger="mouseenter"
-          [tpTippyProps]="hoverOnlyTippy"
-          [attr.aria-label]="
-            entry.team.name +
-            ', ' +
-            rankLabel(entry.rank) +
-            ', ' +
-            entry.points +
-            ' Points'
-          "
-        >
-          <span class="scoreboard__avatar" aria-hidden="true">
-            @if (resolveAvatar(entry.team); as src) {
-              <img [src]="src" alt="" width="36" height="36" />
-            } @else {
-              <span class="scoreboard__avatar-fallback">{{
-                entry.team.name.charAt(0)
-              }}</span>
-            }
-          </span>
-          <span class="scoreboard__meta">
-            <span class="scoreboard__name">{{ entry.team.name }}</span>
-            <span class="scoreboard__points">{{ entry.points }}</span>
-          </span>
-          <span class="scoreboard__rank">{{ rankLabel(entry.rank) }}</span>
-        </a>
-      }
-    </div>
+  <div
+    class="scoreboard-slot"
+    [class.scoreboard-slot--panel]="panelOpen()"
+  >
+    <nav class="scoreboard" aria-label="Scoreboard">
+      <div class="scoreboard__side scoreboard__side--left">
+        @for (entry of leftEntries(); track entry.team.id) {
+          <a
+            class="scoreboard__team"
+            [routerLink]="['/teams', entry.team.id]"
+            [style.--team-color]="entry.team.color"
+            [attr.aria-label]="
+              entry.team.name +
+              ', ' +
+              rankLabel(entry.rank) +
+              ', ' +
+              entry.points +
+              ' Points'
+            "
+          >
+            <span class="scoreboard__avatar" aria-hidden="true">
+              @if (resolveAvatar(entry.team); as src) {
+                <img [src]="src" alt="" width="36" height="36" />
+              } @else {
+                <span class="scoreboard__avatar-fallback">{{
+                  entry.team.name.charAt(0)
+                }}</span>
+              }
+            </span>
+            <span class="scoreboard__meta">
+              <span class="scoreboard__name">{{ entry.team.name }}</span>
+              <span class="scoreboard__score">
+                <span class="scoreboard__points">{{ entry.points }}</span>
+                <span class="scoreboard__rank">{{ rankLabel(entry.rank) }}</span>
+              </span>
+            </span>
+          </a>
+        }
+      </div>
 
-    <div class="scoreboard__logo" aria-hidden="true">
-      <span class="scoreboard__logo-mark">TT</span>
-    </div>
+      <a class="scoreboard__logo" routerLink="/" aria-label="Home">
+        <img
+          class="scoreboard__logo-mark"
+          src="/logo.webp"
+          alt=""
+          width="84"
+          height="84"
+        />
+      </a>
 
-    <div class="scoreboard__side scoreboard__side--right">
-      @for (entry of rightEntries(); track entry.team.id) {
-        <ng-template #tip>
-          <span class="tt-tip">
-            <strong>{{ rankLabel(entry.rank) }}</strong>
-            · {{ entry.territoriesHeld }} Territories
-            · {{ entry.regionsHeld }} Regions
-            · {{ entry.playerCount }} Players
-          </span>
-        </ng-template>
-        <a
-          class="scoreboard__team"
-          [routerLink]="['/teams', entry.team.id]"
-          [style.--team-color]="entry.team.color"
-          [tp]="tip"
-          tpPlacement="bottom"
-          tpTrigger="mouseenter"
-          [tpTippyProps]="hoverOnlyTippy"
-          [attr.aria-label]="
-            entry.team.name +
-            ', ' +
-            rankLabel(entry.rank) +
-            ', ' +
-            entry.points +
-            ' Points'
-          "
-        >
-          <span class="scoreboard__avatar" aria-hidden="true">
-            @if (resolveAvatar(entry.team); as src) {
-              <img [src]="src" alt="" width="36" height="36" />
-            } @else {
-              <span class="scoreboard__avatar-fallback">{{
-                entry.team.name.charAt(0)
-              }}</span>
-            }
-          </span>
-          <span class="scoreboard__meta">
-            <span class="scoreboard__name">{{ entry.team.name }}</span>
-            <span class="scoreboard__points">{{ entry.points }}</span>
-          </span>
-          <span class="scoreboard__rank">{{ rankLabel(entry.rank) }}</span>
-        </a>
-      }
-    </div>
-  </nav>
+      <div class="scoreboard__side scoreboard__side--right">
+        @for (entry of rightEntries(); track entry.team.id) {
+          <a
+            class="scoreboard__team"
+            [routerLink]="['/teams', entry.team.id]"
+            [style.--team-color]="entry.team.color"
+            [attr.aria-label]="
+              entry.team.name +
+              ', ' +
+              rankLabel(entry.rank) +
+              ', ' +
+              entry.points +
+              ' Points'
+            "
+          >
+            <span class="scoreboard__avatar" aria-hidden="true">
+              @if (resolveAvatar(entry.team); as src) {
+                <img [src]="src" alt="" width="36" height="36" />
+              } @else {
+                <span class="scoreboard__avatar-fallback">{{
+                  entry.team.name.charAt(0)
+                }}</span>
+              }
+            </span>
+            <span class="scoreboard__meta">
+              <span class="scoreboard__name">{{ entry.team.name }}</span>
+              <span class="scoreboard__score">
+                <span class="scoreboard__points">{{ entry.points }}</span>
+                <span class="scoreboard__rank">{{ rankLabel(entry.rank) }}</span>
+              </span>
+            </span>
+          </a>
+        }
+      </div>
+    </nav>
+  </div>
 }

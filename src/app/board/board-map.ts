@@ -29,7 +29,6 @@ import type {
 import { LngLatBounds } from 'maplibre-gl';
 import { filter, map, startWith } from 'rxjs';
 import {
-  Scoreboard,
   ViewerDataService,
   buildTerritoryDisplay,
   boundsForTerritory,
@@ -38,6 +37,7 @@ import {
   type TerritoryDisplay,
   type TerritorySelection,
 } from '../viewer';
+import { Scoreboard } from '../viewer/scoreboard';
 import {
   BOARD_BOUNDS,
   BOARD_IMAGE_COORDINATES,

@@ -29,3 +29,13 @@ export function orderTeamPlayers(players: readonly Player[]): Player[] {
 export function playerRankLabel(rank: string): string {
   return RANK_LABEL[rank] ?? 'Soldier';
 }
+
+const TYPE_LABEL: Record<string, string> = {
+  contestant: 'Contestant',
+  tasker: 'Tasker',
+};
+
+/** Display label for a Player's type (Contestant / Tasker). */
+export function playerTypeLabel(type: string): string {
+  return TYPE_LABEL[type] ?? type;
+}

@@ -43,52 +43,171 @@
     </header>
 
     <div class="team-panel__body">
-      <section class="team-panel__section" aria-label="Territories held">
-        <h2 class="team-panel__section-title">
-          Territories ({{ heldTerritories().length }})
-        </h2>
-        @if (heldTerritories().length === 0) {
-          <p class="team-panel__empty">No Territories held</p>
-        } @else {
-          <ul class="team-panel__list">
-            @for (territory of heldTerritories(); track territory.id) {
-              <li>
-                <a
-                  class="team-panel__link"
-                  [routerLink]="['/territories', territory.slug]"
-                >
-                  {{ territory.name }}
-                </a>
-              </li>
-            }
-          </ul>
+      <section class="team-panel__section" aria-label="Players">
+        <button
+          type="button"
+          class="team-panel__section-toggle"
+          (click)="togglePlayers()"
+          [attr.aria-expanded]="playersOpen()"
+        >
+          <span class="team-panel__section-title">
+            Players ({{ players().length }})
+          </span>
+          <span class="team-panel__section-chevron" aria-hidden="true">
+            {{ playersOpen() ? '▾' : '▸' }}
+          </span>
+        </button>
+        @if (playersOpen()) {
+          @if (players().length === 0) {
+            <p class="team-panel__empty">No Players</p>
+          } @else {
+            <ul class="team-panel__players">
+              @for (player of players(); track player.id) {
+                <li class="team-panel__player">
+                  <img
+                    class="team-panel__player-avatar"
+                    [src]="player.avatarUrl"
+                    alt=""
+                    width="28"
+                    height="28"
+                  />
+                  <span class="team-panel__player-identity">
+                    <span class="team-panel__player-name">{{
+                      player.name
+                    }}</span>
+                    @if (player.rank === 'captain') {
+                      <span
+                        class="team-panel__player-role"
+                        [attr.title]="playerRankLabel(player.rank)"
+                        [attr.aria-label]="playerRankLabel(player.rank)"
+                      >
+                        <svg
+                          class="team-panel__player-role-icon"
+                          viewBox="0 0 16 16"
+                          aria-hidden="true"
+                        >
+                          <path
+                            fill="currentColor"
+                            d="M8 1.2l1.7 3.45 3.8.55-2.75 2.68.65 3.8L8 9.9l-3.4 1.78.65-3.8L2.5 5.2l3.8-.55L8 1.2z"
+                          />
+                        </svg>
+                      </span>
+                    } @else if (player.rank === 'lieutenant') {
+                      <span
+                        class="team-panel__player-role"
+                        [attr.title]="playerRankLabel(player.rank)"
+                        [attr.aria-label]="playerRankLabel(player.rank)"
+                      >
+                        <svg
+                          class="team-panel__player-role-icon"
+                          viewBox="0 0 16 16"
+                          aria-hidden="true"
+                        >
+                          <path
+                            fill="currentColor"
+                            d="M3 2.5h10v2.2c0 2.9-1.7 4.7-5 6.3-3.3-1.6-5-3.4-5-6.3V2.5zm1.3 1.2v1c0 2.15 1.25 3.55 3.7 4.85 2.45-1.3 3.7-2.7 3.7-4.85v-1H4.3z"
+                          />
+                        </svg>
+                      </span>
+                    }
+                  </span>
+                  <span class="team-panel__player-type">{{
+                    playerTypeLabel(player.type)
+                  }}</span>
+                </li>
+              }
+            </ul>
+          }
         }
       </section>
 
-      <section class="team-panel__section" aria-label="Players">
-        <h2 class="team-panel__section-title">
-          Players ({{ players().length }})
-        </h2>
-        @if (players().length === 0) {
-          <p class="team-panel__empty">No Players</p>
-        } @else {
-          <ul class="team-panel__players">
-            @for (player of players(); track player.id) {
-              <li class="team-panel__player">
-                <img
-                  class="team-panel__player-avatar"
-                  [src]="player.avatarUrl"
-                  alt=""
-                  width="28"
-                  height="28"
-                />
-                <span class="team-panel__player-name">{{ player.name }}</span>
-                <span class="team-panel__player-rank">{{
-                  playerRankLabel(player.rank)
-                }}</span>
-              </li>
-            }
-          </ul>
+      <section class="team-panel__section" aria-label="Territories held">
+        <button
+          type="button"
+          class="team-panel__section-toggle"
+          (click)="toggleTerritories()"
+          [attr.aria-expanded]="territoriesOpen()"
+        >
+          <span class="team-panel__section-title">
+            Territories ({{ heldTerritories().length }})
+          </span>
+          <span class="team-panel__section-chevron" aria-hidden="true">
+            {{ territoriesOpen() ? '▾' : '▸' }}
+          </span>
+        </button>
+        @if (territoriesOpen()) {
+          @if (heldTerritories().length === 0) {
+            <p class="team-panel__empty">No Territories held</p>
+          } @else {
+            <ul class="team-panel__list">
+              @for (territory of heldTerritories(); track territory.id) {
+                <li class="team-panel__territory">
+                  @if (territory.holdProgress; as progress) {
+                    <ng-template #holdTip>
+                      <span class="tt-tip">
+                        +1 point in
+                        <strong>{{ progress.timeToThreshold }}</strong>
+                        <span class="tt-tip__muted">
+                          (held by {{ progress.timeHeld }})
+                        </span>
+                      </span>
+                    </ng-template>
+                    <span
+                      class="team-panel__hold-progress"
+                      [tp]="holdTip"
+                      tpPlacement="top"
+                      [attr.aria-label]="
+                        '+1 point in ' +
+                        progress.timeToThreshold +
+                        ' (held by ' +
+                        progress.timeHeld +
+                        ')'
+                      "
+                    >
+                      <svg
+                        class="team-panel__hold-ring"
+                        viewBox="0 0 36 36"
+                        aria-hidden="true"
+                      >
+                        <circle
+                          class="team-panel__hold-ring-track"
+                          cx="18"
+                          cy="18"
+                          [attr.r]="holdRing.radius"
+                          fill="none"
+                        />
+                        <circle
+                          class="team-panel__hold-ring-value"
+                          cx="18"
+                          cy="18"
+                          [attr.r]="holdRing.radius"
+                          fill="none"
+                          [attr.stroke-dasharray]="holdRing.circumference"
+                          [attr.stroke-dashoffset]="
+                            holdRingOffset(progress.ratio)
+                          "
+                          transform="rotate(-90 18 18)"
+                        />
+                      </svg>
+                    </span>
+                  }
+                  <a
+                    class="team-panel__link"
+                    [routerLink]="['/territories', territory.slug]"
+                  >
+                    <span class="team-panel__link-name">{{
+                      territory.name
+                    }}</span>
+                    <span class="team-panel__link-defense">
+                      ({{ territory.defense.current }}/{{
+                        territory.defense.max
+                      }})
+                    </span>
+                  </a>
+                </li>
+              }
+            </ul>
+          }
         }
       </section>
 

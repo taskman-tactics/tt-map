@@ -72,7 +72,11 @@ export {
   type ScoreboardInput,
 } from './scoreboard-model';
 export { teamAvatarUrl } from './team-avatar';
-export { orderTeamPlayers, playerRankLabel } from './team-players';
+export {
+  orderTeamPlayers,
+  playerRankLabel,
+  playerTypeLabel,
+} from './team-players';
 export { Scoreboard } from './scoreboard';
 export { TeamSidebar } from './team-sidebar';
 export { TerritorySidebar } from './territory-sidebar';

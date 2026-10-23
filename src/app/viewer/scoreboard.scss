@@ -3,19 +3,38 @@
   pointer-events: none;
 }
 
+/* Keep SIDEBAR_WIDTH_PX / SIDEBAR_BREAKPOINT_PX in sync with territory-bounds.ts */
+.scoreboard-slot {
+  position: fixed;
+  z-index: 2;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  overflow: visible;
+  container-type: inline-size;
+  container-name: scoreboard-slot;
+}
+
+@media (min-width: 768px) {
+  .scoreboard-slot--panel {
+    right: calc(360px + 12px);
+  }
+}
+
 .scoreboard {
   pointer-events: none;
-  position: fixed;
-  z-index: 3;
-  top: 12px;
-  left: 50%;
-  transform: translateX(-50%);
+  position: relative;
   display: flex;
   align-items: stretch;
   gap: 10px;
-  max-width: min(960px, calc(100vw - 24px));
+  width: fit-content;
+  max-width: 100%;
   padding: 8px 10px;
   border-radius: 14px;
+  overflow: visible;
   background:
     linear-gradient(180deg, rgb(255 255 255 / 4%) 0%, transparent 60%),
     rgb(18 18 20 / 88%);
@@ -33,7 +52,7 @@
   align-items: stretch;
   gap: 8px;
   min-width: 0;
-  flex: 1 1 0;
+  flex: 0 1 auto;
 }
 
 .scoreboard__side--left {
@@ -45,26 +64,42 @@
 }
 
 .scoreboard__logo {
-  pointer-events: none;
+  pointer-events: auto;
+  position: relative;
+  z-index: 1;
   flex: none;
-  display: grid;
-  place-items: center;
-  width: 48px;
-  align-self: center;
+  align-self: stretch;
+  width: 84px;
+  text-decoration: none;
+  color: inherit;
 }
 
 .scoreboard__logo-mark {
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: rgb(255 255 255 / 8%);
-  border: 1px solid rgb(255 255 255 / 12%);
-  font-size: 0.85rem;
-  font-weight: 750;
-  letter-spacing: 0.04em;
-  color: #fafafa;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: block;
+  /* Circle taller than the bar so it overflows top/bottom. */
+  height: calc(100% + 36px);
+  width: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 50%;
+  filter: drop-shadow(0 6px 14px rgb(0 0 0 / 40%));
+  transition:
+    transform 120ms ease,
+    filter 120ms ease;
+}
+
+.scoreboard__logo:hover .scoreboard__logo-mark,
+.scoreboard__logo:focus-visible .scoreboard__logo-mark {
+  transform: translate(-50%, -50%) scale(1.03);
+  filter: drop-shadow(0 8px 18px rgb(0 0 0 / 48%));
+}
+
+.scoreboard__logo:focus-visible {
+  outline: none;
 }
 
 .scoreboard__team {
@@ -122,6 +157,7 @@
 
 .scoreboard__meta {
   min-width: 0;
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -136,6 +172,13 @@
   text-overflow: ellipsis;
 }
 
+.scoreboard__score {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
 .scoreboard__points {
   font-size: 0.85rem;
   font-weight: 700;
@@ -145,9 +188,6 @@
 
 .scoreboard__rank {
   flex: none;
-  margin-left: auto;
-  align-self: flex-start;
-  margin-top: 2px;
   padding: 2px 7px;
   border-radius: 999px;
   font-size: 0.65rem;
@@ -158,22 +198,29 @@
   border: 1px solid color-mix(in srgb, var(--team-color) 35%, transparent);
 }
 
-@media (max-width: 720px) {
+/* Compact to avatar + Points when the map strip is too narrow for names/ranks. */
+@container scoreboard-slot (max-width: 720px) {
   .scoreboard {
     gap: 6px;
     padding: 6px;
-    top: 8px;
-    max-width: calc(100vw - 16px);
   }
 
   .scoreboard__logo {
+    align-self: center;
     width: 36px;
   }
 
   .scoreboard__logo-mark {
     width: 32px;
     height: 32px;
-    font-size: 0.72rem;
+    border-radius: 50%;
+    filter: none;
+  }
+
+  .scoreboard__logo:hover .scoreboard__logo-mark,
+  .scoreboard__logo:focus-visible .scoreboard__logo-mark {
+    transform: translate(-50%, -50%);
+    filter: none;
   }
 
   .scoreboard__team {
@@ -195,6 +242,10 @@
     display: none;
   }
 
+  .scoreboard__score {
+    gap: 0;
+  }
+
   .scoreboard__avatar {
     width: 32px;
     height: 32px;
@@ -203,5 +254,13 @@
   .scoreboard__points {
     font-size: 0.8rem;
     padding-right: 2px;
+  }
+}
+
+@media (max-width: 767px) {
+  .scoreboard-slot {
+    top: 8px;
+    left: 8px;
+    right: 8px;
   }
 }

@@ -95,3 +95,9 @@ Angular's `<base href=\"/\">` makes bare SVG `url(#clipId)` resolve against the 
 **Action:** pending
 
 On a cold load of a child URL (e.g. `/territories/:slug`), the parent component can see `ActivatedRoute.firstChild` before that child's `snapshot` is attached. Reading `firstChild.snapshot.paramMap` during field init throws and aborts route activation (blank screen). Read child params from `Router.routerState.snapshot` (committed tree), or from the child component's own `ActivatedRoute`.
+
+## 2026-10-22: Vite HMR can leave a template tag without its Angular component
+
+**Action:** pending
+
+After adding a new standalone component mid-`ng serve` session, HMR can update the parent template (`<app-scoreboard />`) while the child never appears in the bundle's `selectors: [["app-…"]]` list — empty custom element, "UI missing" with no compile error. Feedback loop: fetch `/main.js` and assert the new selector string; hard-restart `ng serve` (or a fresh port) when a new component is invisible. Prefer a component TestBed smoke test that queries the rendered root class.

@@ -55,11 +55,10 @@
   margin: 6px 0 0;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   font-size: 0.8rem;
   font-weight: 550;
   font-variant-numeric: tabular-nums;
-  letter-spacing: 0.02em;
   color: var(--panel-muted);
 }
 
@@ -209,21 +208,20 @@
 
 .territory-panel__region-badge {
   font-size: 0.7rem;
-  font-weight: 550;
-  padding: 3px 9px;
+  font-weight: 650;
+  padding: 2px 8px;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--panel-accent) 16%, transparent);
-  color: color-mix(in srgb, var(--panel-accent) 75%, white);
-  border: 1px solid color-mix(in srgb, var(--panel-accent) 28%, transparent);
+  background: color-mix(in srgb, var(--panel-accent) 18%, transparent);
+  color: color-mix(in srgb, var(--panel-accent) 70%, white);
+  border: 1px solid color-mix(in srgb, var(--panel-accent) 30%, transparent);
 }
 
 .territory-panel__holding {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  column-gap: 6px;
-  row-gap: 4px;
-  font-size: 0.95rem;
+  gap: 8px;
+  font-size: 0.9rem;
   line-height: 1.35;
 }
 
@@ -277,9 +275,9 @@
   position: absolute;
   left: 0;
   right: 0;
-  /* Sit just under the text baseline, not under the taller icon. */
-  top: calc(50% + 0.42em);
-  height: 1px;
+  /* Sit under the text baseline with clear air — not under the taller icon. */
+  top: calc(50% + 0.55em);
+  height: 2px;
   background: currentColor;
   opacity: 0;
   z-index: 0;
@@ -339,9 +337,9 @@
 
 .territory-panel__section-title {
   margin: 0;
-  font-size: 0.85rem;
+  font-size: 0.72rem;
   font-weight: 650;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--panel-faint);
   transition: color 120ms ease;
@@ -357,13 +355,13 @@
 .territory-panel__activity-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 6px;
 }
 
 .territory-panel__activity {
-  border-radius: var(--panel-radius);
-  border: 1px solid var(--panel-border);
-  background: var(--panel-bg-elevated);
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: rgb(255 255 255 / 2%);
   overflow: hidden;
 }
 
@@ -373,16 +371,16 @@
 
 .territory-panel__activity-name {
   margin: 0;
-  padding: 8px 12px 6px;
-  font-size: 0.92rem;
-  font-weight: 650;
+  padding: 8px 10px 6px;
+  font-size: 0.9rem;
+  font-weight: 550;
   letter-spacing: -0.01em;
   border-bottom: 1px solid var(--panel-border);
 }
 
 .territory-panel__task-list {
   margin: 0;
-  padding: 6px 12px 8px;
+  padding: 6px 10px 8px;
   list-style: none;
   display: flex;
   flex-direction: column;
@@ -391,7 +389,7 @@
 
 .territory-panel__task {
   position: relative;
-  padding: 1px 0 1px 0.9rem;
+  padding: 2px 0 2px 0.9rem;
   line-height: 1.35;
   font-size: 0.88rem;
 }
