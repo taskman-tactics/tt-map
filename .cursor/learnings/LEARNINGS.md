@@ -89,3 +89,9 @@ terra-draw `finish` also fires for `insertMidpoint`. A fresh midpoint lies on th
 **Action:** pending
 
 Angular's `<base href=\"/\">` makes bare SVG `url(#clipId)` resolve against the document base instead of the in-document `<clipPath id>`, so clipped overlays miss and look offset. Build the reference from the current page URL (strip hash, append `#id`), e.g. `url(http://host/path#clipId)`.
+
+## 2026-10-22: Parent route components must not walk ActivatedRoute.firstChild.snapshot at construct time
+
+**Action:** pending
+
+On a cold load of a child URL (e.g. `/territories/:slug`), the parent component can see `ActivatedRoute.firstChild` before that child's `snapshot` is attached. Reading `firstChild.snapshot.paramMap` during field init throws and aborts route activation (blank screen). Read child params from `Router.routerState.snapshot` (committed tree), or from the child component's own `ActivatedRoute`.

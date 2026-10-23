@@ -6,7 +6,7 @@ import {
   inject,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import {
   ControlComponent,
   GeoJSONSourceComponent,
@@ -42,6 +42,7 @@ import {
   BOARD_IMAGE_COORDINATES,
   BOARD_MAX_BOUNDS,
 } from './board-coordinates';
+import { territorySlugFromSnapshot } from './territory-route-slug';
 
 /** Mid zoom at which Territory names appear above Defense labels. */
 export const TERRITORY_NAME_MIN_ZOOM = 9.5;
@@ -66,8 +67,6 @@ const TERRITORIES_FILL_LAYER = 'territories-fill';
 export class BoardMap {
   private readonly viewer = inject(ViewerDataService);
   private readonly router = inject(Router);
-  private readonly route = inject(ActivatedRoute);
-
   private map: MapLibreMap | null = null;
   private hoveredSlug: string | null = null;
   private lastFittedSlug: string | null = null;
@@ -274,11 +273,7 @@ export class BoardMap {
   }
 
   private readSelectedSlug(): string | null {
-    let current: ActivatedRoute | null = this.route;
-    while (current?.firstChild) {
-      current = current.firstChild;
-    }
-    return current?.snapshot.paramMap.get('slug') ?? null;
+    return territorySlugFromSnapshot(this.router.routerState.snapshot.root);
   }
 
   private featureIdsForSlug(slug: string): string[] {
