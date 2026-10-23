@@ -6,7 +6,8 @@
       "id": "barrows",
       "properties": {
         "id": "barrows",
-        "name": "Barrows"
+        "name": "Barrows",
+        "territory": "barrows"
       },
       "geometry": {
         "type": "Polygon",
@@ -381,7 +382,8 @@
       "id": "kharyll",
       "properties": {
         "id": "kharyll",
-        "name": "Kharyll"
+        "name": "Kharyll",
+        "territory": "kharyll"
       },
       "geometry": {
         "type": "Polygon",
@@ -2256,7 +2258,8 @@
       "id": "gravewater",
       "properties": {
         "id": "gravewater",
-        "name": "Gravewater"
+        "name": "Gravewater",
+        "territory": "gravewater"
       },
       "geometry": {
         "type": "Polygon",
@@ -3919,7 +3922,8 @@
       "id": "vampyrium-and-darkmeyer",
       "properties": {
         "id": "vampyrium-and-darkmeyer",
-        "name": "Vampyrium and Darkmeyer"
+        "name": "Vampyrium and Darkmeyer",
+        "territory": "vampyrium-and-darkmeyer"
       },
       "geometry": {
         "type": "Polygon",
@@ -4722,7 +4726,8 @@
       "id": "ver-sinhaza",
       "properties": {
         "id": "ver-sinhaza",
-        "name": "Ver Sinhaza"
+        "name": "Ver Sinhaza",
+        "territory": "ver-sinhaza"
       },
       "geometry": {
         "type": "Polygon",
@@ -5457,7 +5462,8 @@
       "id": "jalvetas-pyramid",
       "properties": {
         "id": "jalvetas-pyramid",
-        "name": "Jalvetas Pyramid"
+        "name": "Jalvetas Pyramid",
+        "territory": "jalvetas-pyramid"
       },
       "geometry": {
         "type": "Polygon",
@@ -5584,7 +5590,8 @@
       "id": "kharidian-desert",
       "properties": {
         "id": "kharidian-desert",
-        "name": "Kharidian Desert"
+        "name": "Kharidian Desert",
+        "territory": "kharidian-desert"
       },
       "geometry": {
         "type": "Polygon",
@@ -6927,7 +6934,8 @@
       "id": "karamja",
       "properties": {
         "id": "karamja",
-        "name": "Karamja"
+        "name": "Karamja",
+        "territory": "karamja"
       },
       "geometry": {
         "type": "Polygon",
@@ -8038,7 +8046,8 @@
       "id": "gravewater-2",
       "properties": {
         "id": "gravewater-2",
-        "name": "Gravewater 2"
+        "name": "Gravewater 2",
+        "territory": "gravewater"
       },
       "geometry": {
         "type": "Polygon",
@@ -9213,7 +9222,8 @@
       "id": "kharidian-desert-2",
       "properties": {
         "id": "kharidian-desert-2",
-        "name": "Kharidian desert 2"
+        "name": "Kharidian desert 2",
+        "territory": "kharidian-desert"
       },
       "geometry": {
         "type": "Polygon",
@@ -9344,7 +9354,8 @@
       "id": "southern-isles",
       "properties": {
         "id": "southern-isles",
-        "name": "Southern Isles"
+        "name": "Southern Isles",
+        "territory": "southern-isles"
       },
       "geometry": {
         "type": "Polygon",
@@ -9915,7 +9926,8 @@
       "id": "fossil-island",
       "properties": {
         "id": "fossil-island",
-        "name": "Fossil Island"
+        "name": "Fossil Island",
+        "territory": "fossil-island"
       },
       "geometry": {
         "type": "Polygon",
@@ -11634,7 +11646,8 @@
       "id": "fortis-colluseum",
       "properties": {
         "id": "fortis-colluseum",
-        "name": "Fortis Colluseum"
+        "name": "Fortis Colluseum",
+        "territory": "fortis-colluseum"
       },
       "geometry": {
         "type": "Polygon",
@@ -12045,7 +12058,8 @@
       "id": "priffdinnas",
       "properties": {
         "id": "priffdinnas",
-        "name": "Priffdinnas"
+        "name": "Priffdinnas",
+        "territory": "priffdinnas"
       },
       "geometry": {
         "type": "Polygon",
@@ -13736,7 +13750,8 @@
       "id": "poison-wastes",
       "properties": {
         "id": "poison-wastes",
-        "name": "Poison Wastes"
+        "name": "Poison Wastes",
+        "territory": "poison-wastes"
       },
       "geometry": {
         "type": "Polygon",
@@ -15447,7 +15462,8 @@
       "id": "the-abyss",
       "properties": {
         "id": "the-abyss",
-        "name": "the abyss"
+        "name": "the abyss",
+        "territory": "the-abyss"
       },
       "geometry": {
         "type": "Polygon",
@@ -15818,7 +15834,8 @@
       "id": "grandroot",
       "properties": {
         "id": "grandroot",
-        "name": "grandroot"
+        "name": "grandroot",
+        "territory": "grandroot"
       },
       "geometry": {
         "type": "Polygon",
@@ -16149,7 +16166,8 @@
       "id": "fremennik-region",
       "properties": {
         "id": "fremennik-region",
-        "name": "Fremennik Region"
+        "name": "Fremennik Region",
+        "territory": "fremennik-region"
       },
       "geometry": {
         "type": "Polygon",
@@ -16836,7 +16854,8 @@
       "id": "ghorrock-dungeon",
       "properties": {
         "id": "ghorrock-dungeon",
-        "name": "Ghorrock Dungeon"
+        "name": "Ghorrock Dungeon",
+        "territory": "ghorrock-dungeon"
       },
       "geometry": {
         "type": "Polygon",
@@ -17303,7 +17322,8 @@
       "id": "the-darkfrost",
       "properties": {
         "id": "the-darkfrost",
-        "name": "The Darkfrost"
+        "name": "The Darkfrost",
+        "territory": "the-darkfrost"
       },
       "geometry": {
         "type": "Polygon",
@@ -17974,7 +17994,8 @@
       "id": "avium-proudlands",
       "properties": {
         "id": "avium-proudlands",
-        "name": "Avium Proudlands"
+        "name": "Avium Proudlands",
+        "territory": "avium-proudlands"
       },
       "geometry": {
         "type": "Polygon",
@@ -21409,7 +21430,8 @@
       "id": "cam-torum",
       "properties": {
         "id": "cam-torum",
-        "name": "Cam Torum"
+        "name": "Cam Torum",
+        "territory": "cam-torum"
       },
       "geometry": {
         "type": "Polygon",
@@ -22844,7 +22866,8 @@
       "id": "tlatli-rainforest",
       "properties": {
         "id": "tlatli-rainforest",
-        "name": "Tlatli Rainforest"
+        "name": "Tlatli Rainforest",
+        "territory": "tlatli-rainforest"
       },
       "geometry": {
         "type": "Polygon",
@@ -25743,7 +25766,8 @@
       "id": "greater-custodia",
       "properties": {
         "id": "greater-custodia",
-        "name": "Greater Custodia"
+        "name": "Greater Custodia",
+        "territory": "greater-custodia"
       },
       "geometry": {
         "type": "Polygon",
@@ -29562,7 +29586,8 @@
       "id": "the-abyss-2",
       "properties": {
         "id": "the-abyss-2",
-        "name": "The Abyss 2"
+        "name": "The Abyss 2",
+        "territory": "the-abyss"
       },
       "geometry": {
         "type": "Polygon",
@@ -29757,7 +29782,8 @@
       "id": "dareeyak",
       "properties": {
         "id": "dareeyak",
-        "name": "Dareeyak"
+        "name": "Dareeyak",
+        "territory": "dareeyak"
       },
       "geometry": {
         "type": "Polygon",
@@ -30256,7 +30282,8 @@
       "id": "old-ghorrock",
       "properties": {
         "id": "old-ghorrock",
-        "name": "Old Ghorrock"
+        "name": "Old Ghorrock",
+        "territory": "old-ghorrock"
       },
       "geometry": {
         "type": "Polygon",
@@ -30523,7 +30550,8 @@
       "id": "annakarl",
       "properties": {
         "id": "annakarl",
-        "name": "Annakarl"
+        "name": "Annakarl",
+        "territory": "annakarl"
       },
       "geometry": {
         "type": "Polygon",
@@ -30926,7 +30954,8 @@
       "id": "bleakwater",
       "properties": {
         "id": "bleakwater",
-        "name": "Bleakwater"
+        "name": "Bleakwater",
+        "territory": "bleakwater"
       },
       "geometry": {
         "type": "Polygon",
@@ -31441,7 +31470,8 @@
       "id": "carrallanger",
       "properties": {
         "id": "carrallanger",
-        "name": "Carrallanger"
+        "name": "Carrallanger",
+        "territory": "carrallanger"
       },
       "geometry": {
         "type": "Polygon",
@@ -31908,7 +31938,8 @@
       "id": "mt-quidamortem",
       "properties": {
         "id": "mt-quidamortem",
-        "name": "Mt. Quidamortem"
+        "name": "Mt. Quidamortem",
+        "territory": "mt-quidamortem"
       },
       "geometry": {
         "type": "Polygon",
@@ -32411,7 +32442,8 @@
       "id": "mt-karuulm",
       "properties": {
         "id": "mt-karuulm",
-        "name": "Mt Karuulm"
+        "name": "Mt Karuulm",
+        "territory": "mt-karuulm"
       },
       "geometry": {
         "type": "Polygon",
@@ -33310,7 +33342,8 @@
       "id": "outer-kourend-2",
       "properties": {
         "id": "outer-kourend-2",
-        "name": "Outer Kourend"
+        "name": "Outer Kourend",
+        "territory": "outer-kourend"
       },
       "geometry": {
         "type": "Polygon",
@@ -33497,7 +33530,8 @@
       "id": "outer-kourend",
       "properties": {
         "id": "outer-kourend",
-        "name": "Outer Kourend"
+        "name": "Outer Kourend",
+        "territory": "outer-kourend"
       },
       "geometry": {
         "type": "Polygon",
@@ -34256,7 +34290,8 @@
       "id": "kharedsts-landing",
       "properties": {
         "id": "kharedsts-landing",
-        "name": "Kharedsts Landing"
+        "name": "Kharedsts Landing",
+        "territory": "kharedsts-landing"
       },
       "geometry": {
         "type": "Polygon",
@@ -35363,7 +35398,8 @@
       "id": "senntisten",
       "properties": {
         "id": "senntisten",
-        "name": "Senntisten"
+        "name": "Senntisten",
+        "territory": "senntisten"
       },
       "geometry": {
         "type": "Polygon",
@@ -35766,7 +35802,8 @@
       "id": "sara-bandos",
       "properties": {
         "id": "sara-bandos",
-        "name": "Sara + Bandos"
+        "name": "Sara + Bandos",
+        "territory": "sara-bandos"
       },
       "geometry": {
         "type": "Polygon",
@@ -36181,7 +36218,8 @@
       "id": "zammy-arma-2",
       "properties": {
         "id": "zammy-arma-2",
-        "name": "Zammy + Arma"
+        "name": "Zammy + Arma",
+        "territory": "zammy-arma"
       },
       "geometry": {
         "type": "Polygon",
@@ -36604,7 +36642,8 @@
       "id": "zammy-arma",
       "properties": {
         "id": "zammy-arma",
-        "name": "Zammy + Arma"
+        "name": "Zammy + Arma",
+        "territory": "zammy-arma"
       },
       "geometry": {
         "type": "Polygon",
@@ -36955,7 +36994,8 @@
       "id": "sara-bandos-2",
       "properties": {
         "id": "sara-bandos-2",
-        "name": "Sara + Bandos"
+        "name": "Sara + Bandos",
+        "territory": "sara-bandos"
       },
       "geometry": {
         "type": "Polygon",
