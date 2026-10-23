@@ -101,3 +101,15 @@ On a cold load of a child URL (e.g. `/territories/:slug`), the parent component 
 **Action:** pending
 
 After adding a new standalone component mid-`ng serve` session, HMR can update the parent template (`<app-scoreboard />`) while the child never appears in the bundle's `selectors: [["app-…"]]` list — empty custom element, "UI missing" with no compile error. Feedback loop: fetch `/main.js` and assert the new selector string; hard-restart `ng serve` (or a fresh port) when a new component is invisible. Prefer a component TestBed smoke test that queries the rendered root class.
+
+## 2026-10-23: removeEventListener must match capture (and other) options
+
+**Action:** pending
+
+`addEventListener(type, handler, true)` / `{ capture: true }` registers a different listener slot than the bubble default. `removeEventListener(type, handler)` without the same capture flag leaves the capture listener attached (leaks after destroy, keeps firing). Always pass the same capture/options object used at add time.
+
+## 2026-10-23: focus viewChild behind @if with afterNextRender, not queueMicrotask
+
+**Action:** pending
+
+Toggling an `@if` to reveal an input and then `queueMicrotask(() => viewChild()?.focus())` often runs before Angular has created the node, so focus is a no-op. Use `afterNextRender(..., { injector })` (same pattern as Territory sidebar deep-links) so the element exists.

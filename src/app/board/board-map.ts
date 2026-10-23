@@ -303,9 +303,10 @@ export class BoardMap {
       case 'team':
         void this.router.navigate(['/teams', intent.teamId]);
         break;
-      case 'region':
-        // Fit only — do not change the route (issue #5 AC).
-        this.fitToRegion(intent.regionId);
+      case 'player':
+        void this.router.navigate(['/teams', intent.teamId], {
+          queryParams: { player: intent.playerId },
+        });
         break;
     }
   }
@@ -409,43 +410,6 @@ export class BoardMap {
         padding,
         maxZoom: 12,
         duration: 400,
-      },
-    );
-  }
-
-  private fitToRegion(regionId: string): void {
-    if (!this.map) {
-      return;
-    }
-    const state = this.viewer.state();
-    if (state.status !== 'ready') {
-      return;
-    }
-    const slugs = new Set(
-      state.territories
-        .filter((t) => t.regionId === regionId)
-        .map((t) => t.slug),
-    );
-    if (slugs.size === 0) {
-      return;
-    }
-    const features = this.territoryDisplay().polygons.features.filter((f) =>
-      slugs.has(String(f.properties['territory'] ?? '')),
-    );
-    const bbox = boundsForTerritory(features);
-    if (!bbox) {
-      return;
-    }
-    this.lastFittedSlug = null;
-    this.map.fitBounds(
-      new LngLatBounds(
-        [bbox.west, bbox.south],
-        [bbox.east, bbox.north],
-      ),
-      {
-        padding: 48,
-        maxZoom: 11,
-        duration: 450,
       },
     );
   }

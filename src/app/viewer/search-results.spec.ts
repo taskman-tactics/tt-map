@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import type {
   Activity,
   Player,
-  Region,
   Task,
   Team,
   Territory,
@@ -23,7 +22,6 @@ function territory(partial: Partial<Territory> & Pick<Territory, 'id' | 'name'>)
 function catalog(overrides: Partial<SearchCatalog> = {}): SearchCatalog {
   return {
     territories: [],
-    regions: [],
     activities: [],
     tasks: [],
     teams: [],
@@ -68,10 +66,6 @@ describe('searchResults', () => {
   });
 
   it('returns groups in kind order and caps hits per group', () => {
-    const regions: Region[] = [
-      { id: 'r1', name: 'Misthalin' },
-      { id: 'r2', name: 'Morytania' },
-    ];
     const teams: Team[] = [
       {
         id: 'team-m',
@@ -106,7 +100,6 @@ describe('searchResults', () => {
     const groups = searchResults(
       catalog({
         territories: [territory({ id: 't1', name: 'Falador' })],
-        regions,
         activities,
         tasks,
         teams,
@@ -117,16 +110,14 @@ describe('searchResults', () => {
     );
 
     expect(groups.map((g) => g.kind)).toEqual([
-      'region',
       'activity',
       'task',
       'team',
       'player',
     ]);
     expect(groups.find((g) => g.kind === 'player')?.hits).toHaveLength(3);
-    expect(groups.find((g) => g.kind === 'region')?.hits.map((h) => h.id)).toEqual([
-      'r1',
-      'r2',
+    expect(groups.find((g) => g.kind === 'activity')?.hits.map((h) => h.id)).toEqual([
+      'a1',
     ]);
   });
 

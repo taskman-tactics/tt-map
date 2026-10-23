@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import type {
   Activity,
   Player,
-  Region,
   Task,
   Team,
   Territory,
@@ -25,10 +24,9 @@ function territory(
 function catalog(overrides: Partial<SearchCatalog> = {}): SearchCatalog {
   return {
     territories: [
-      territory({ id: 't1', name: 'Lumbridge', slug: 'lumbridge', regionId: 'r1' }),
-      territory({ id: 't2', name: 'Draynor', slug: 'draynor', regionId: 'r1' }),
+      territory({ id: 't1', name: 'Lumbridge', slug: 'lumbridge' }),
+      territory({ id: 't2', name: 'Draynor', slug: 'draynor' }),
     ],
-    regions: [{ id: 'r1', name: 'Misthalin' } satisfies Region],
     activities: [
       { id: 'a1', name: 'Cows', territoryId: 't1' } satisfies Activity,
     ],
@@ -113,22 +111,13 @@ describe('resolveSearchSelection', () => {
     ).toEqual({ type: 'team', teamId: 'team-z' });
   });
 
-  it('maps a Player hit to their Team', () => {
+  it('maps a Player hit to their Team with player deep-link', () => {
     expect(
       resolveSearchSelection(
         { kind: 'player', id: 'p1', name: 'Alice' },
         catalog(),
       ),
-    ).toEqual({ type: 'team', teamId: 'team-z' });
-  });
-
-  it('maps a Region hit to a fit-region intent (no route)', () => {
-    expect(
-      resolveSearchSelection(
-        { kind: 'region', id: 'r1', name: 'Misthalin' },
-        catalog(),
-      ),
-    ).toEqual({ type: 'region', regionId: 'r1' });
+    ).toEqual({ type: 'player', teamId: 'team-z', playerId: 'p1' });
   });
 
   it('returns null when a Player has no Team', () => {

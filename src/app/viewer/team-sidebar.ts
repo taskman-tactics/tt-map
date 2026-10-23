@@ -1,7 +1,11 @@
 import {
   Component,
   DestroyRef,
+  ElementRef,
+  Injector,
+  afterNextRender,
   computed,
+  effect,
   inject,
   signal,
 } from '@angular/core';
@@ -15,6 +19,7 @@ import {
   holdCycleProgressRatio,
   holdCycleRemainingMs,
 } from './held-duration';
+import { resolvePlayerDeepLink } from './player-deep-link';
 import { rankLabel } from './scoreboard-model';
 import { teamRanks } from './selectors';
 import { teamAvatarUrl } from './team-avatar';
@@ -26,6 +31,9 @@ import {
 import { ViewerDataService } from './viewer-data';
 
 const DURATION_TICK_MS = 30_000;
+const HIGHLIGHT_MS = 1_800;
+const DEEP_LINK_ATTEMPTS = 8;
+const DEEP_LINK_RETRY_MS = 50;
 
 export type HoldProgress = {
   ratio: number;
@@ -47,16 +55,29 @@ export class TeamSidebar {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly viewer = inject(ViewerDataService);
+  private readonly host = inject(ElementRef<HTMLElement>);
+  private readonly injector = inject(Injector);
 
   protected playerRankLabel = playerRankLabel;
   protected playerTypeLabel = playerTypeLabel;
   protected readonly territoriesOpen = signal(true);
   protected readonly playersOpen = signal(false);
   private readonly nowMs = signal(Date.now());
+  private readonly highlightKey = signal<string | null>(null);
+  private lastDeepLinkKey: string | null = null;
 
   protected readonly teamId = toSignal(
     this.route.paramMap.pipe(map((params) => params.get('id'))),
     { initialValue: null as string | null },
+  );
+
+  private readonly deepLink = toSignal(
+    this.route.queryParamMap.pipe(
+      map((params) =>
+        resolvePlayerDeepLink({ player: params.get('player') }),
+      ),
+    ),
+    { initialValue: null },
   );
 
   protected readonly ready = computed(() => {
@@ -136,6 +157,26 @@ export class TeamSidebar {
       DURATION_TICK_MS,
     );
     inject(DestroyRef).onDestroy(() => clearInterval(tick));
+
+    effect(() => {
+      const target = this.deepLink();
+      const players = this.players();
+      const teamId = this.teamId();
+      if (!target || players.length === 0) {
+        return;
+      }
+      const appliedKey = `player:${teamId}:${target.id}`;
+      if (this.lastDeepLinkKey === appliedKey) {
+        return;
+      }
+      this.playersOpen.set(true);
+      afterNextRender(
+        () => {
+          this.tryDeepLink(target.id, appliedKey, 0);
+        },
+        { injector: this.injector },
+      );
+    });
   }
 
   protected holdRingOffset(ratio: number): number {
@@ -153,6 +194,49 @@ export class TeamSidebar {
 
   protected togglePlayers(): void {
     this.playersOpen.update((open) => !open);
+  }
+
+  protected isHighlighted(playerId: string): boolean {
+    return this.highlightKey() === `player:${playerId}`;
+  }
+
+  private tryDeepLink(
+    playerId: string,
+    appliedKey: string,
+    attempt: number,
+  ): void {
+    if (this.applyDeepLink(playerId)) {
+      this.lastDeepLinkKey = appliedKey;
+      return;
+    }
+    if (attempt + 1 >= DEEP_LINK_ATTEMPTS) {
+      return;
+    }
+    window.setTimeout(
+      () => this.tryDeepLink(playerId, appliedKey, attempt + 1),
+      DEEP_LINK_RETRY_MS,
+    );
+  }
+
+  private applyDeepLink(playerId: string): boolean {
+    const el = this.host.nativeElement.querySelector(
+      `#player-${CSS.escape(playerId)}`,
+    );
+    if (!(el instanceof HTMLElement)) {
+      return false;
+    }
+    const row = el.closest('.team-panel__player') ?? el;
+    if (row instanceof HTMLElement) {
+      row.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+    const highlight = `player:${playerId}`;
+    this.highlightKey.set(highlight);
+    window.setTimeout(() => {
+      if (this.highlightKey() === highlight) {
+        this.highlightKey.set(null);
+      }
+    }, HIGHLIGHT_MS);
+    return true;
   }
 }
 

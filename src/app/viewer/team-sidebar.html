@@ -63,7 +63,12 @@
           } @else {
             <ul class="team-panel__players">
               @for (player of players(); track player.id) {
-                <li class="team-panel__player">
+                <li
+                  class="team-panel__player"
+                  [class.team-panel__player--highlight]="
+                    isHighlighted(player.id)
+                  "
+                >
                   <img
                     class="team-panel__player-avatar"
                     [src]="player.avatarUrl"
@@ -72,9 +77,11 @@
                     height="28"
                   />
                   <span class="team-panel__player-identity">
-                    <span class="team-panel__player-name">{{
-                      player.name
-                    }}</span>
+                    <span
+                      class="team-panel__player-name"
+                      [attr.id]="'player-' + player.id"
+                      >{{ player.name }}</span
+                    >
                     @if (player.rank === 'captain') {
                       <span
                         class="team-panel__player-role"

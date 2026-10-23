@@ -2,6 +2,8 @@ import {
   Component,
   DestroyRef,
   ElementRef,
+  Injector,
+  afterNextRender,
   computed,
   inject,
   output,
@@ -24,7 +26,6 @@ import { ViewerDataService } from './viewer-data';
 
 const KIND_LABEL: Record<SearchKind, string> = {
   territory: 'Territories',
-  region: 'Regions',
   activity: 'Activities',
   task: 'Tasks',
   team: 'Teams',
@@ -38,9 +39,9 @@ const KIND_LABEL: Record<SearchKind, string> = {
 })
 export class ViewerSearch {
   private readonly viewer = inject(ViewerDataService);
-  private readonly host = inject(ElementRef<HTMLElement>);
+  private readonly injector = inject(Injector);
 
-  /** Selection intents (routes + region fit) handled by the map host. */
+  /** Selection intents handled by the map host. */
   readonly selectIntent = output<SearchSelectionIntent>();
 
   private readonly inputEl =
@@ -57,7 +58,6 @@ export class ViewerSearch {
     }
     return {
       territories: state.territories,
-      regions: state.regions,
       activities: state.activities,
       tasks: state.tasks,
       teams: state.teams,
@@ -95,32 +95,22 @@ export class ViewerSearch {
     };
     window.addEventListener('keydown', onKeydown, true);
 
-    const onPointerDown = (event: PointerEvent) => {
-      if (!this.open()) {
-        return;
-      }
-      const target = event.target;
-      if (
-        target instanceof Node &&
-        !this.host.nativeElement.contains(target)
-      ) {
-        this.closeSearch();
-      }
-    };
-    window.addEventListener('pointerdown', onPointerDown);
-
     inject(DestroyRef).onDestroy(() => {
       window.removeEventListener('keydown', onKeydown, true);
-      window.removeEventListener('pointerdown', onPointerDown);
     });
   }
 
   protected openSearch(): void {
     this.open.set(true);
-    queueMicrotask(() => {
-      this.inputEl()?.nativeElement.focus();
-      this.inputEl()?.nativeElement.select();
-    });
+    // Input is behind @if — wait for the next render before focusing.
+    afterNextRender(
+      () => {
+        const input = this.inputEl()?.nativeElement;
+        input?.focus();
+        input?.select();
+      },
+      { injector: this.injector },
+    );
   }
 
   protected closeSearch(): void {

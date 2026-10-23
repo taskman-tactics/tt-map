@@ -314,6 +314,10 @@
   background: rgb(255 255 255 / 2%);
 }
 
+.team-panel__player--highlight {
+  animation: player-highlight 1.8s ease-out;
+}
+
 .team-panel__player-avatar {
   flex: none;
   width: 28px;
@@ -417,5 +421,14 @@
   to {
     transform: translateY(0);
     opacity: 1;
+  }
+}
+
+@keyframes player-highlight {
+  0% {
+    background: color-mix(in srgb, var(--panel-accent) 28%, transparent);
+  }
+  100% {
+    background: transparent;
   }
 }

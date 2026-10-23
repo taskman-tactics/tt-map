@@ -66,6 +66,10 @@ export {
   type TaskDeepLink,
 } from './task-deep-link';
 export {
+  resolvePlayerDeepLink,
+  type PlayerDeepLink,
+} from './player-deep-link';
+export {
   searchResults,
   type SearchCatalog,
   type SearchGroup,

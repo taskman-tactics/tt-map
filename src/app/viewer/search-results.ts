@@ -1,7 +1,6 @@
 import type {
   Activity,
   Player,
-  Region,
   Task,
   Team,
   Territory,
@@ -9,7 +8,6 @@ import type {
 
 export type SearchCatalog = {
   territories: readonly Territory[];
-  regions: readonly Region[];
   activities: readonly Activity[];
   tasks: readonly Task[];
   teams: readonly Team[];
@@ -18,7 +16,6 @@ export type SearchCatalog = {
 
 export type SearchKind =
   | 'territory'
-  | 'region'
   | 'activity'
   | 'task'
   | 'team'
@@ -39,7 +36,6 @@ const DEFAULT_PER_GROUP = 5;
 
 const KIND_ORDER: readonly SearchKind[] = [
   'territory',
-  'region',
   'activity',
   'task',
   'team',
@@ -63,7 +59,6 @@ export function searchResults(
   const byKind = new Map<SearchKind, ScoredHit[]>();
 
   collect(byKind, 'territory', catalog.territories, needle);
-  collect(byKind, 'region', catalog.regions, needle);
   collect(byKind, 'activity', catalog.activities, needle);
   collect(byKind, 'task', catalog.tasks, needle);
   collect(byKind, 'team', catalog.teams, needle);

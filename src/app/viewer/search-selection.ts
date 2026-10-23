@@ -5,9 +5,9 @@ export type SearchSelectionIntent =
   | { type: 'task'; slug: string; taskId: string }
   | { type: 'activity'; slug: string; activityId: string }
   | { type: 'team'; teamId: string }
-  | { type: 'region'; regionId: string };
+  | { type: 'player'; teamId: string; playerId: string };
 
-/** Turn a search hit into a Viewer navigation / map-fit intent. */
+/** Turn a search hit into a Viewer navigation intent. */
 export function resolveSearchSelection(
   hit: SearchHit,
   catalog: SearchCatalog,
@@ -17,10 +17,6 @@ export function resolveSearchSelection(
       const territory = catalog.territories.find((t) => t.id === hit.id);
       return territory ? { type: 'territory', slug: territory.slug } : null;
     }
-    case 'region':
-      return catalog.regions.some((r) => r.id === hit.id)
-        ? { type: 'region', regionId: hit.id }
-        : null;
     case 'team':
       return catalog.teams.some((t) => t.id === hit.id)
         ? { type: 'team', teamId: hit.id }
@@ -28,7 +24,7 @@ export function resolveSearchSelection(
     case 'player': {
       const player = catalog.players.find((p) => p.id === hit.id);
       return player?.teamId
-        ? { type: 'team', teamId: player.teamId }
+        ? { type: 'player', teamId: player.teamId, playerId: player.id }
         : null;
     }
     case 'activity': {
