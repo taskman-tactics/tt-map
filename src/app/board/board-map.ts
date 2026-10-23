@@ -38,6 +38,8 @@ import {
   type TerritorySelection,
 } from '../viewer';
 import { Scoreboard } from '../viewer/scoreboard';
+import type { SearchSelectionIntent } from '../viewer/search-selection';
+import { ViewerSearch } from '../viewer/viewer-search';
 import {
   BOARD_BOUNDS,
   BOARD_IMAGE_COORDINATES,
@@ -63,6 +65,7 @@ const TERRITORIES_FILL_LAYER = 'territories-fill';
     NavigationControlDirective,
     RouterOutlet,
     Scoreboard,
+    ViewerSearch,
   ],
   templateUrl: './board-map.html',
   styleUrl: './board-map.scss',
@@ -284,6 +287,39 @@ export class BoardMap {
     void this.router.navigate(['/']);
   }
 
+  protected onSearchIntent(intent: SearchSelectionIntent): void {
+    switch (intent.type) {
+      case 'territory':
+        this.navigateTerritory(intent.slug);
+        break;
+      case 'task':
+        this.navigateTerritory(intent.slug, { task: intent.taskId });
+        break;
+      case 'activity':
+        this.navigateTerritory(intent.slug, {
+          activity: intent.activityId,
+        });
+        break;
+      case 'team':
+        void this.router.navigate(['/teams', intent.teamId]);
+        break;
+      case 'region':
+        // Fit only — do not change the route (issue #5 AC).
+        this.fitToRegion(intent.regionId);
+        break;
+    }
+  }
+
+  private navigateTerritory(
+    slug: string,
+    queryParams?: Record<string, string>,
+  ): void {
+    this.lastFittedSlug = null;
+    void this.router.navigate(['/territories', slug], {
+      queryParams: queryParams ?? {},
+    });
+  }
+
   private readSelectedSlug(): string | null {
     return territorySlugFromSnapshot(this.router.routerState.snapshot.root);
   }
@@ -373,6 +409,43 @@ export class BoardMap {
         padding,
         maxZoom: 12,
         duration: 400,
+      },
+    );
+  }
+
+  private fitToRegion(regionId: string): void {
+    if (!this.map) {
+      return;
+    }
+    const state = this.viewer.state();
+    if (state.status !== 'ready') {
+      return;
+    }
+    const slugs = new Set(
+      state.territories
+        .filter((t) => t.regionId === regionId)
+        .map((t) => t.slug),
+    );
+    if (slugs.size === 0) {
+      return;
+    }
+    const features = this.territoryDisplay().polygons.features.filter((f) =>
+      slugs.has(String(f.properties['territory'] ?? '')),
+    );
+    const bbox = boundsForTerritory(features);
+    if (!bbox) {
+      return;
+    }
+    this.lastFittedSlug = null;
+    this.map.fitBounds(
+      new LngLatBounds(
+        [bbox.west, bbox.south],
+        [bbox.east, bbox.north],
+      ),
+      {
+        padding: 48,
+        maxZoom: 11,
+        duration: 450,
       },
     );
   }

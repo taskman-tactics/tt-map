@@ -66,6 +66,22 @@ export {
   type TaskDeepLink,
 } from './task-deep-link';
 export {
+  searchResults,
+  type SearchCatalog,
+  type SearchGroup,
+  type SearchHit,
+  type SearchKind,
+} from './search-results';
+export {
+  resolveSearchSelection,
+  type SearchSelectionIntent,
+} from './search-selection';
+export {
+  shouldHandleSearchShortcut,
+  type SearchShortcutEvent,
+} from './search-shortcut';
+export { ViewerSearch } from './viewer-search';
+export {
   rankLabel,
   scoreboardEntries,
   type ScoreboardEntry,

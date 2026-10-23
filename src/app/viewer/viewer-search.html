@@ -1,0 +1,85 @@
+<div class="viewer-search" [class.viewer-search--open]="open()">
+  @if (!open()) {
+    <button
+      type="button"
+      class="viewer-search__toggle"
+      aria-label="Search"
+      (click)="openSearch()"
+    >
+      <svg
+        class="viewer-search__icon"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="2" />
+        <path
+          d="M16.5 16.5 21 21"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+        />
+      </svg>
+    </button>
+  } @else {
+    <div class="viewer-search__panel" role="combobox" aria-expanded="true" aria-haspopup="listbox">
+      @if (groups().length > 0) {
+        <div class="viewer-search__results" role="listbox" aria-label="Search results">
+          @for (group of groups(); track group.kind) {
+            <div class="viewer-search__group">
+              <div class="viewer-search__group-label">{{ kindLabel(group.kind) }}</div>
+              @for (hit of group.hits; track hit.kind + ':' + hit.id) {
+                <button
+                  type="button"
+                  class="viewer-search__hit"
+                  role="option"
+                  [attr.aria-selected]="isActive(hit)"
+                  [class.viewer-search__hit--active]="isActive(hit)"
+                  (click)="choose(hit)"
+                  (mouseenter)="activeIndex.set(flatIndex(hit))"
+                >
+                  <span class="viewer-search__hit-name">{{ hit.name }}</span>
+                </button>
+              }
+            </div>
+          }
+        </div>
+      } @else if (query().trim()) {
+        <div class="viewer-search__empty">No matches</div>
+      }
+
+      <div class="viewer-search__field">
+        <svg
+          class="viewer-search__icon viewer-search__icon--inline"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="2" />
+          <path
+            d="M16.5 16.5 21 21"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+        </svg>
+        <input
+          #searchInput
+          class="viewer-search__input"
+          type="search"
+          autocomplete="off"
+          spellcheck="false"
+          placeholder="Search Territories, Teams…"
+          aria-label="Search"
+          aria-autocomplete="list"
+          [value]="query()"
+          (input)="onQueryInput($any($event.target).value)"
+          (keydown)="onInputKeydown($event)"
+        />
+        <kbd class="viewer-search__hint">esc</kbd>
+      </div>
+    </div>
+  }
+</div>
