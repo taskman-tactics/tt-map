@@ -5487,11 +5487,11 @@
     },
     {
       "type": "Feature",
-      "id": "jalvetas-pyramid",
+      "id": "jaltevas-pyramid",
       "properties": {
-        "id": "jalvetas-pyramid",
-        "name": "Jalvetas Pyramid",
-        "territory": "jalvetas-pyramid"
+        "id": "jaltevas-pyramid",
+        "name": "Jaltevas Pyramid",
+        "territory": "jaltevas-pyramid"
       },
       "geometry": {
         "type": "Polygon",
@@ -12083,11 +12083,11 @@
     },
     {
       "type": "Feature",
-      "id": "priffdinnas",
+      "id": "prifddinas",
       "properties": {
-        "id": "priffdinnas",
-        "name": "Priffdinnas",
-        "territory": "priffdinnas"
+        "id": "prifddinas",
+        "name": "Prifddinas",
+        "territory": "prifddinas"
       },
       "geometry": {
         "type": "Polygon",
@@ -22891,11 +22891,11 @@
     },
     {
       "type": "Feature",
-      "id": "tlatli-rainforest",
+      "id": "tlati-rainforest",
       "properties": {
-        "id": "tlatli-rainforest",
-        "name": "Tlatli Rainforest",
-        "territory": "tlatli-rainforest"
+        "id": "tlati-rainforest",
+        "name": "Tlati Rainforest",
+        "territory": "tlati-rainforest"
       },
       "geometry": {
         "type": "Polygon",
@@ -37163,7 +37163,7 @@
       "properties": {
         "id": "zamorak-armadyl-2",
         "name": "Zamorak & Armadyl",
-        "territory": "zamorak-armadyl-2"
+        "territory": "zamorak-armadyl"
       },
       "geometry": {
         "type": "Polygon",
